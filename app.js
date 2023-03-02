@@ -44,7 +44,7 @@ Handlebars.registerHelper('calculateTotal', function(cart) {
   cart.forEach(function(item) {
     total += item.quantity * item.productid.Price;
   });
-  return total.toFixed(2);
+  return total;
 });
 
 
