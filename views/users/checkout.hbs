@@ -75,12 +75,12 @@
 
                             {{#each address.address}}
 
-                            <div class="address col-lg-8"
+                            <div  class="address col-lg-8"
                                 style="display: flex; justify-content: space-between; align-items: flex-start;">
                                 <input type="radio" id="address{{@index}}" name="address" style="margin-right: 10%;"
                                     form="form2"
                                     value="{{this.street}},{{this.district}},{{this.state}},{{this.country}} - {{this.pincode}}">
-                                <div>
+                                <div id="address">
                                     <p>{{this.street}},
                                         {{this.district}},
                                         {{this.state}},
@@ -186,7 +186,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="form1" action="/add_addresscheckout" method="post">
+            <form id="form1" >
                 <div class="modal-body">
 
                     <div class="form-group">
@@ -233,6 +233,48 @@
 {{>user_footer}}
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
+
+
+<script>
+    $('#form1').on('submit', function(e){
+  e.preventDefault(); // prevent default form submit behavior
+  var formData = $(this).serialize();
+  $.ajax({
+    url: '/add_addresscheckout',
+    type: 'POST',
+    data: formData,
+    success: function(response){
+      // hide the modal
+      $('#form').modal('hide');
+      // success logic here
+       $('#form1')[0].reset();
+       $('#address').load('/checkout #address')
+    },
+    error: function(xhr, status, error){
+      // error logic here
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <script>
@@ -352,8 +394,9 @@
                 order
             },
             method: 'post',
-            success: (response) => {
-                if (response.status) {
+            success: (res) => {
+                console.log(res)
+                if (res.status) {
                     location.href = '/order_confirmation'
                     console.log('payment success')
                 } else {

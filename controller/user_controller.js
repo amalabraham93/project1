@@ -265,7 +265,7 @@ module.exports = {
 
         console.log(userdata);
 
-        res.redirect("/checkout");
+        res.json({success:true})
       }
     } catch (error) {
       next(error);
@@ -963,37 +963,40 @@ module.exports = {
        
 
         const crypto = require('crypto')
-        let hmac = crypto.createHmac('sha256', '8k6mLxEf9pmQ0VSqj1TVnqjL')
+        let hmac = crypto.createHmac('sha256', 'rygNBsuv7VhbANu61bV29OHa')
         hmac.update(req.body['response[razorpay_order_id]'] + '|' + req.body['response[razorpay_payment_id]'])
         hmac = hmac.digest('hex')
         console.log(hmac == req.body['response[razorpay_signature]']);
         if (hmac === req.body['response[razorpay_signature]']) {
             console.log("payment succesfull");
-            orderId = order.id
-            console.log(orderId);
-
-            const orderdata = await User.findOne({ email: req.session.userid })
-            .populate("order.product.product")
-            .lean();
-    
-            const latestorder = orderdata.order.sort((a, b) => b.order_date - a.order_date)[0];  
+            // orderId = req.body['order[id]']
+            // console.log(orderId);
+            console.log('verifyied');
+          //   const orderdata = await User.findOne({ email: req.session.userid }, { order: { $slice: -1 } }).sort({ "order.order_date": -1 })
+          //   .populate("order.product.product")
+          //   .lean();
+          //  console.log( orderdata.order[0].status);
+          //  orderdata.order[0].status = "Placed"
+          // await orderdata.save()
+            // const latestorder = orderdata.order.sort((a, b) => b.order_date - a.order_date)[0];  
            
-            latestorder.status =  "Placed"     
-
-            
-            res.json({ status: true })
-     
+            // latestorder.status =  "Placed"     
+             
+            // await latestorder.save()
+            res.json({status: true })
+             
 
         } else {
             console.log("payment failed");
 
-            const orderdata = await User.findOne({ email: req.session.userid })
-            .populate("order.product.product")
-            .lean();
-    
-            const latestorder = orderdata.order.sort((a, b) => b.order_date - a.order_date)[0];
+          //   const orderdata = await User.findOne({ email: req.session.userid }, { order: { $slice: -1 } }).sort({ "order.order_date": -1 })
+          //   .populate("order.product.product")
+          //   .lean();
 
-            latestorder.status =  "Payment Failed"
+          //  console.log(orderdata);
+          //  orderdata.order[0].status = "Payment Failed"
+          // await orderdata.save();
+           
             res.json({ status: false })
         }
       }
