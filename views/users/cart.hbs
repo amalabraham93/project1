@@ -123,22 +123,26 @@
 
                                     <input type="text" name="qty" id="main-container" maxlength="12"
                                         value="{{this.quantity}}" title="Quantity:" class="input-text qty" readonly>
-                                    {{!-- <a id="inc" href="/incqty/{{this.productid._id}}">
-                                        <button class="increase items-count" type="button"><i
+                                    {{!-- <a id="inc" href="/incqty/{{this.productid._id}}"> --}}
+                                        <button class="increase items-count" onclick=" incqty('{{this.productid._id}}')" type="button"><i
                                                 class="lnr lnr-chevron-up"></i></button>
-                                    </a>
-                                    <a id="dec" href="/decqty/{{this.productid._id}}">
-                                        <button class="reduced items-count" type="button"><i
+                                    {{!-- </a> --}}
+                                    {{!-- <a id="dec" href="/decqty/{{this.productid._id}}"> --}}
+                                        <button class="reduced items-count"  onclick=" decqty('{{this.productid._id}}')" type="button"><i
                                                 class="lnr lnr-chevron-down"></i></button>
-                                    </a> --}}
-                                    <a id="inc" href="/incqty/{{this.productid._id}}" >
+                                    {{!-- </a> --}}
+
+
+
+
+                                    {{!-- <a id="inc" href="/incqty/{{this.productid._id}}" >
                                         <button class="increase items-count" type="button"><i
                                                 class="lnr lnr-chevron-up"></i></button>
                                     </a>
                                     <a id="dec" href="/decqty/{{this.productid._id}}" >
                                         <button class="reduced items-count" type="button"><i
                                                 class="lnr lnr-chevron-down"></i></button>
-                                    </a>
+                                    </a> --}}
 
                                 </div>
                             </td>
@@ -183,8 +187,8 @@
                                 <h5>Subtotal</h5>
                             </td>
                             <td id="sst" class="subtotal" name="subtotal">
-                                <h5>$ {{calculateTotal cart1.cart}}</h5>
-                                <input type="hidden" name="subtotal" value="{{calculateTotal cart1.cart}}">
+                                <h5 id="billtotal">$ {{calculateTotal cart1.cart}}</h5>
+                                <input type="hidden" name="subtotal"  id="totalbill" value="{{calculateTotal cart1.cart}}">
                             </td>
                         </tr>
                         {{!-- <tr class="shipping_area">
@@ -268,9 +272,9 @@
 
 
 
-<script>
+{{!-- <script>
     $(document).ready(function (event) {
-        $('.increase').on('click', function () {
+         function inc() {
             event.preventDefault();
             let price = $('#price').val()
             let currentQty = parseInt($(this).siblings('.qty').val());
@@ -316,34 +320,51 @@
             }
         });
     });
-</script>
+</script> --}}
 
 
 
 
 
-{{!--
+
 <script>
     function incqty(id) {
+            let price = $('#price').text()
+            let currentQty = parseInt($('input[name="qty"]').val());
+            let newQty = currentQty + 1;
+             let subtotal = parseInt($('#totalbill').val())
+           {{!-- let alltotal = (subtotal)+(price) --}}
+
         $.ajax({
             url: '/incqty/' + id,
             type: 'GET',
             success: function (response) {
-                $('#sst').html(response);
+                 $('input[name="qty"]').val(newQty);
+                    $('#total1').text( newQty * price);
+                     $('#sst').text( '$'+newQty * price); 
+                      {{!-- $('#billtotal').text( alltotal ); --}}
             }
         });
     }
 
     function decqty(id) {
+            let price = $('#price').text()
+            let currentQty = parseInt($('input[name="qty"]').val());
+            let newQty = currentQty - 1;
+            let subtotal = parseInt($('#totalbill').val())
+          {{!-- let alltotal = (subtotal)-(price) --}}
         $.ajax({
             url: '/decqty/' + id,
             type: 'GET',
             success: function (response) {
-                $('#sst').html(response);
+                     $('input[name="qty"]').val(newQty);
+                     $('#total1').val( newQty * price);
+                     $('#sst').text( '$'+newQty * price); 
+                     {{!-- $('#billtotal').text( alltotal ); --}}
             }
         });
     }
-</script> --}}
+</script>
 
 
 
