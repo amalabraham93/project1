@@ -1,0 +1,27 @@
+{{>admin_nav}}
+
+
+<form action="/admin/updatecategory" method="post">
+    <div class="mb-3">
+        <label class="form-label" for="form3Example1c">Category Name</label>
+        <input type="text" id="form3Example1c" class="form-control" name="categoryname"  value="{{category.categoryname}}" required/>
+        <label for="exampleInputEmail1" class="form-label"> Discription</label>
+        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="discription" value="{{category.discription}}" required>
+    </div>
+
+
+    <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Status</label>
+        <input type="text" class="form-control" id="exampleInputPassword1" name="status" value="{{category.status}}">
+    </div>
+    <input type="hidden" name="id" value="{{category._id}}">
+    {{#if categorystatus}}
+    <div class="alert alert-danger text-center mb-3">{{categorystatus}}</div>
+    {{/if}}
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
+{{amin_footer}}
+
+

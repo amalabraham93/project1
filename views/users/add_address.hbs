@@ -1,0 +1,103 @@
+{{>user_headnav}}
+
+<style>
+    /* Set the width of the form */
+form {
+    max-width: 500px;
+    margin: auto;
+}
+
+/* Center the Save button */
+button[type="submit"] {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+/* Add some padding to the form */
+form > * {
+    padding: 10px;
+}
+
+/* Add some margin to the top of the address section */
+h5 {
+    margin-top: 20px;
+}
+</style>
+<!-- End Header Area -->
+
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>My Profile</h1>
+                <nav class="d-flex align-items-center">
+                    <a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+                    <a href="category.html">Profile</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
+
+<!--================profile Box Area =================-->
+<section class="login_box_area section_gap">
+    <div class="container emp-profile">
+        
+
+        <form action="/add_newaddress" method="post" class="needs-validation" >
+           
+            <h5>Address</h5>
+
+            <div class="form-group">
+                <label for="street">Street:</label>
+                <input type="text" id="street" name="street" class="form-control" required>
+                <div class="invalid-feedback">Please enter your street address.</div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="country">Country:</label>
+                    <input type="text" id="country" name="country" class="form-control" required>
+                    <div class="invalid-feedback">Please enter your country.</div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="state">State:</label>
+                    <input type="text" id="state" name="state" class="form-control" required>
+                    <div class="invalid-feedback">Please enter your state.</div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="district">District:</label>
+                    <input type="text" id="district" name="district" class="form-control" required>
+                    <div class="invalid-feedback">Please enter your district.</div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="pincode">Pincode:</label>
+                    <input type="text" id="pincode" name="pincode" class="form-control" required>
+                    <div class="invalid-feedback">Please enter your pincode.</div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Save</button>
+            </form>
+           
+    </div>
+</section>
+<!--================End Login Box Area =================-->
+
+<!-- start footer Area -->
+
+
+{{>user_footer}}
+
+
+<script>
+    console.log("jjojpoo")
+</script>

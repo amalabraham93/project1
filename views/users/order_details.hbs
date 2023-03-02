@@ -1,0 +1,101 @@
+{{>user_headnav}}
+<!-- End Header Area -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Shopping Cart</h1>
+                <nav class="d-flex align-items-center">
+                    <a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+                    <a href="category.html">Cart</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
+
+<!--================Cart Area =================-->
+<section class="cart_area">
+    <div class="container">
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <h1>Order Details</h1>
+                    <hr>
+                   
+                    {{#each orderdata.[0].order}}
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>{{this.order_id}}</h4>
+                        </div>
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Product Name</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each product}}
+                                    <tr>
+                                        <td><img src="/productImages/{{this.product.image.[0]}}" alt=""  style="width: 20%;"></td>
+                                        <td>{{this.product.Name}}</td>
+                                        <td>{{this.quantity}}</td>
+                                        <td>${{this.product.Price}}</td>
+                                    </tr>
+                                    {{/each}}
+                            </table>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Shipping Address</h5>
+                                    <p>{{delivery_address}}</p>
+                                    
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Order Summary</h5>
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <td>Subtotal:</td>
+                                                <td>${{this.total}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Shipping:</td>
+                                                <td>$5.00</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Total:</strong></td>
+                                                <td><strong>${{bill_amount}}</strong></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<!--================End Cart Area =================-->
+
+<!-- start footer Area -->
+
+{{>user_footer}}

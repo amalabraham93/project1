@@ -1,0 +1,446 @@
+<style>
+    .address {
+        border: 1px solid rgb(255 158 32);
+        border-style: solid;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: relative;
+    }
+
+    .address .options {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .address .options button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 5px;
+        font-size: 16px;
+    }
+
+    .address .options button:hover {
+        background-color: lightgray;
+    }
+
+    .add-address {
+        margin-top: 20px;
+    }
+</style>
+
+
+
+{{>user_headnav}}
+
+
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Checkout</h1>
+                <nav class="d-flex align-items-center">
+                    <a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+                    <a href="single-product.html">Checkout</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
+
+<!--================Checkout Area =================-->
+<section class="checkout_area section_gap">
+    <div class="container">
+
+        <div class="cupon_area">
+            <div class="check_title">
+                <h2>Have a coupon? </h2>
+            </div>
+            <form id="coupon-form">
+                <input form="coupon-form" type="text" placeholder="Enter coupon code" name="code" id="coupon-code">
+                <button form="coupon-form" type="submit" class="tp_btn">Apply Coupon</button>
+            </form>
+            <div id="coupon-message"></div>
+        </div>
+        <form id="form2">
+            <div class="billing_details">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <h3>Billing Details</h3>
+                        <div id="addresses ">
+
+                            {{#each address.address}}
+
+                            <div class="address col-lg-8"
+                                style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <input type="radio" id="address{{@index}}" name="address" style="margin-right: 10%;"
+                                    form="form2"
+                                    value="{{this.street}},{{this.district}},{{this.state}},{{this.country}} - {{this.pincode}}">
+                                <div>
+                                    <p>{{this.street}},
+                                        {{this.district}},
+                                        {{this.state}},
+                                        {{this.country}} -
+                                        {{this.pincode}}</p>
+                                </div>
+                                <div class="dropdown">
+                                    <button type="button" class="btn btn-light dropdown-toggle"
+                                        data-bs-toggle="dropdown" aria-expanded="false"><span
+                                            class="bi bi-three-dots-vertical"></span></button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><a class="dropdown-item" href="/edit_address/{{this._id}}">Edit</a></li>
+                                        <li><a class="dropdown-item" href="/delete_address/{{this._id}}">Delete</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            {{/each}}
+                        </div>
+
+                        {{!-- pop up address --}}
+
+                        <div class="container">
+                            <button type="button" class="btn primary-btn" data-toggle="modal" data-target="#form">
+                                ADD NEW ADDRESS
+                            </button>
+                        </div>
+
+
+                        {{!-- model form end --}}
+
+                    </div>
+                    <div class="col-lg-4">
+
+                        <div class="order_box">
+                            <h2>Your Order</h2>
+
+                            <ul class="list">
+                                <li><a href="#">Product <span>Total</span></a></li>
+                                {{#each cart1.cart }}
+
+                                <input type="hidden" name="product" value="{{this.productid._id}}" form="form2">
+                                <input type="hidden" name="quantity" value="{{this.quantity}}" form="form2">
+                                <input type="hidden" name="total" value="{{total this.quantity this.productid.Price}}"
+                                    form="form2">
+                                <li><a href="#">{{this.productid.Name}}<span class="middle">x {{this.quantity}}</span>
+                                        <span class="last">${{total this.quantity this.productid.Price}}</span></a></li>
+                                {{/each}}
+                            </ul>
+
+                            <ul class="list list_2">
+                                <li><a href="#">Subtotal <span>$ {{calculateTotal cart1.cart}}</span></a></li>
+                                <li><a href="#">Shipping <span>Flat rate: $5.00</span></a></li>
+                                <li> <a href="">Coupon discout <span id="discount"></span></a></li>
+                                <li><a href="#">Total <span id="newtotal">${{cartTotal cart1.cart 5 }}</span></a></li>
+                                <input type="hidden" name="subtotal" value="{{calculateTotal cart1.cart}}" form="form2">
+                                <input type="hidden" id="total" name="Total" value="{{cartTotal cart1.cart 5 }}"
+                                    form="form2">
+                                <input type="hidden" name="coupon" id="code" value="" form="form2">
+                                <input type="hidden" name="coupon_discount" id="discount1" value="" form="form2">
+                            </ul>
+
+                            <div class="payment_item active">
+                                <div class="">
+                                    <input type="radio" id="f-option1" name="payment_method" value="razorpay"
+                                        form="form2">
+                                    <label for="f-option1">Razorpay</label>
+                                    <img src="/projecct_asset/img/product/card.jpg" alt="">
+                                    <div class="check"></div>
+                                </div>
+                                <p>Pay via PayPal; you can pay with your credit card if you don’t have a PayPal
+                                    account.</p>
+
+
+                                <input type="radio" id="f-option" name="payment_method" value="cash_on_delivery"
+                                    form="form2">
+                                <label for="f-option">Cash on Delivery</label>
+                                <div class="check"></div>
+
+                                <p>Please pay the amount at the time Delivery</p>
+                            </div>
+                            <div class="creat_account">
+                                <input type="checkbox" id="f-option4" name="selector" form="form2">
+                                <label for="f-option4">I’ve read and accept the </label>
+                                <a href="#">terms & conditions*</a>
+                            </div>
+                            {{!-- <button id="rzp-button1">Pay</button> --}}
+                            <button class="primary-btn" type="submit" form="form2">Proceed to Payment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!--================End Checkout Area =================-->
+<div class="modal fade" id="form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title" id="exampleModalLabel">Add New Address</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="form1" action="/add_addresscheckout" method="post">
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="street">Street:</label>
+                        <input type="text" id="street" name="street" class="form-control" form="form1" required>
+                        <div class="invalid-feedback">Please enter your street address.</div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="country">Country:</label>
+                            <input type="text" id="country" name="country" class="form-control" form="form1" required>
+                            <div class="invalid-feedback">Please enter your country.</div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="state">State:</label>
+                            <input type="text" id="state" name="state" class="form-control" form="form1" required>
+                            <div class="invalid-feedback">Please enter your state.</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="district">District:</label>
+                            <input type="text" id="district" name="district" form="form1" class="form-control" required>
+                            <div class="invalid-feedback">Please enter your district.</div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="pincode">Pincode:</label>
+                            <input type="text" id="pincode" name="pincode" class="form-control" form="form1" required>
+                            <div class="invalid-feedback">Please enter your pincode.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0 d-flex justify-content-center">
+                    <button type="submit" class="btn primary-btn" form="form1">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{{>user_footer}}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        submitCouponForm();
+    });
+
+    function submitCouponForm() {
+        $('#coupon-form').submit(function (event) {
+            event.preventDefault(); // prevent form from submitting normally
+            const total = $('#total').val()
+            const code = $('#coupon-code').val(); // get the coupon code from an input field with id "coupon-code"
+            console.log(total)
+            $.ajax({
+                url: '/apply_coupon',
+                type: 'POST',
+                data: { code: code, total: total },
+                success: function (response) {
+                    if (response.success) {
+                        console.log(response)
+                        // update the UI to reflect that the coupon was applied successfully
+                        $('#coupon-message').text('COUPON SUCCSESFULY APPLIED').css('color', 'green');
+                        // const total = parseFloat($('#total').text()); // get the total amount
+                        const discount1 = parseFloat(response.discount); // get the coupon discount amount
+                        const newTotal = (total - discount1).toFixed(2); // subtract discount from total and round to 2 decimal places
+                        console.log(discount1)
+                        $('#discount').text("-" + discount1).css('color', 'green');;
+                        $('#newtotal').text(newTotal); // update the UI with the new total amount
+                        $('#total').val(newTotal);
+                        $('#code').val(code);
+                        $('#discount1').val(discount1);
+                    } else if (response.inactive) {
+                        $('#coupon-message').text('COUPON YOU ENTERED IS INACTIVE').css('color', 'red');
+                    } else if (response.expired) {
+                        $('#coupon-message').text('COUPON YOU ENTERED HAS EXPIRED').css('color', 'red');
+                    } else if (response.used) {
+                        $('#coupon-message').text('COUPON YOU ENTERED HAS IS ALREADY USED').css('color', 'red');
+
+                    } else if (response.minprice) {
+                        $('#coupon-message').text(response.message).css('color', 'red');
+
+                    } else if (response.notfound) {
+                        $('#coupon-message').text(response.message).css('color', 'red');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // handle errors
+                    const errorMessage = JSON.parse(xhr.responseText).message;
+                    $('#coupon-message').text(errorMessage);
+                }
+            });
+            return false
+        });
+    }
+</script>
+
+
+
+<script>
+    $("#form2").submit((e) => {
+        e.preventDefault()
+
+        $.ajax({
+            url: '/proceedtopay',
+            method: 'post',
+            data: $("#form2").serialize(),
+            success: (response) => {
+                console.log(response)
+                if (response.codstatus == true) {
+                    location.href = '/order_confirmation'
+                } else {
+                    console.log('razorpayyyy')
+                    razorpayPayment(response)
+                }
+            }
+        })
+    })
+
+
+    function razorpayPayment(order) {
+        console.log('razorpayyyysadasdasdasdad')
+        console.log(order)
+        var options = {
+            "key": "rzp_test_g5RMF7tYWVvJgS", // Enter the Key ID generated from the Dashboard
+            "amount": order.total, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "outfitque E-CART",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response) {
+                console.log(response)
+                verifyPayment(response, order)
+            },
+            "prefill": {
+                "name": "Gaurav Kumar",
+                "email": "gaurav.kumar@example.com",
+                "contact": "9999999999"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    }
+
+    function verifyPayment(response, order) {
+        console.log(response, " bbytgtygiyugtgygiytgutg")
+        $.ajax({
+            url: '/verify-payment',
+            data: {
+                response,
+                order
+            },
+            method: 'post',
+            success: (response) => {
+                if (response.status) {
+                    location.href = '/order_confirmation'
+                    console.log('payment success')
+                } else {
+                    console.log('payment failed`````')
+
+                }
+            }
+        })
+    }
+
+
+
+</script>
+
+
+
+
+
+
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+{{!--
+<script>
+    var options = {
+        "key": "rzp_test_g5RMF7tYWVvJgS", // Enter the Key ID generated from the Dashboard
+        "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "Acme Corp", //your business name
+        "description": "Test Transaction",
+        "image": "https://example.com/your_logo",
+        "order_id": "order_9A33XWu170gUtm", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function (response) {
+            alert(response.razorpay_payment_id);
+            alert(response.razorpay_order_id);
+            alert(response.razorpay_signature)
+        },
+        "prefill": {
+            "name": "Gaurav Kumar", //your customer's name
+            "email": "gaurav.kumar@example.com",
+            "contact": "9000090000"
+        },
+        "notes": {
+            "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.on('payment.failed', function (response) {
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+    });
+    document.getElementById('rzp-button1').onclick = function (e) {
+        rzp1.open();
+        e.preventDefault();
+    }
+</script> --}}
+
+
+{{!--
+<script>
+    var orderId;
+    $(document).ready(function () {
+        var settings = {
+            "url": "/create/orderId",
+            "method": "POST",
+            "timeout": 0,
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "data": JSON.stringify({
+                "amount": "50000"
+            }),
+        };
+
+        //creates new orderId everytime
+        $.ajax(settings).done(function (response) {
+
+            orderId = response.orderId;
+            console.log(orderId);
+            $("button").show();
+        });
+    });
+</script> --}}

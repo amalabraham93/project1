@@ -1,0 +1,125 @@
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Arial, sans-serif;
+    }
+
+    thead {
+        background-color: #f2f2f2;
+    }
+
+    th,
+    td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        cursor: pointer;
+        border-radius: 15%;
+    }
+
+    .active {
+        background-color: #4CAF50;
+        color: white;
+    }
+</style>
+
+
+
+{{>admin_nav}}
+
+
+
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+
+            <p class="card-description mt-5">
+            <h1>COUPONS MANAGEMENT</h1>
+            </p>
+             {{!--<a href="/admin/add_product" class="btn btn-outline-success btn-lg">Add new Product</a>
+            <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.."> --}}
+            <div>
+                <label for="filterInput">Filter:</label>
+                <input type="text" id="filterInput">
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>COUPONS CODE </th>
+                        <th>PERCENT OFF </th>
+                        <th>MAXIMUM DISCOUNT </th>
+                        <th>START DATE </th>
+                        <th>END DATE </th>
+                        <th>MINIMUM PURCHASE</th>
+                        <th>STATUS</th>
+                        <th>ACTION </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{log coupon}}
+                    {{#each coupon}}
+                    <tr>
+                        <td>{{this.code}}</td>
+                        <td>{{this.percentOff}}%</td>
+                        <td>{{maxDiscount}}</td>
+                        <td>{{formatDate this.startDate}}</td>
+                        <td>{{formatDate this.expirationDate}}</td>
+                        <td>{{this.minimumPurchaseAmount}}</td>
+                        <td>{{this.status}}</td>
+                        <td><a href="/admin/edit_coupons/{{this._id}}"><button class="bi bi-pencil-square"> Edit</button></a> <a href=""><button>Activate</button></a></td>
+                    </tr>
+                    {{/each}}
+                   
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{{>admin_footer}}
+
+
+<script>
+    const filterTable = () => {
+        // Get input value
+        const filter = document.getElementById("filterInput").value.toUpperCase();
+        // Get table rows
+        const rows = document.querySelector("table tbody").rows;
+
+        // Loop through rows and hide those that don't match the filter
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].cells;
+            let shouldHide = true;
+
+            for (let j = 0; j < cells.length; j++) {
+                const cellText = cells[j].textContent.toUpperCase();
+
+                if (cellText.indexOf(filter) > -1) {
+                    shouldHide = false;
+                    break;
+                }
+            }
+
+            if (shouldHide) {
+                rows[i].style.display = "none";
+            } else {
+                rows[i].style.display = "";
+            }
+        }
+    };
+
+    // Add event listener to filter input
+    document.getElementById("filterInput").addEventListener("keyup", filterTable);
+</script>

@@ -1,0 +1,212 @@
+
+/* Webpixels CSS */
+/* Utility and component-centric Design System based on Bootstrap for fast, responsive UI development */
+/* URL: https://github.com/webpixels/css */
+
+/* @import url(https://unpkg.com/@webpixels/css@1.1.5/dist/index.css); */
+
+/* Bootstrap Icons */
+@import url("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.4.0/font/bootstrap-icons.min.css");
+
+
+
+
+
+
+
+
+
+
+/*admin dashboard */
+/* user table */
+
+* {
+  box-sizing: border-box;
+}
+
+#myInput {
+  background-image: url('https://www.pngfind.com/pngs/m/54-545482_vector-search-icon-search-icon-vector-png-transparent.png');
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+#myTable {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #ddd;
+  font-size: 12px;
+}
+
+#myTable th, #myTable td {
+  text-align: center;
+  padding: 12px;
+}
+
+#myTable tr {
+  border-bottom: 1px solid #ddd;
+}
+
+#myTable tr.header, #myTable tr:hover {
+  background-color: #f1f1f1;
+}
+
+
+
+/* admin nav bar */
+/* body {
+  background: #32495f;
+  background: linear-gradient(to right, #02234e, #aad2ec);
+}
+
+.btn-login {
+  font-size: 0.9rem;
+  letter-spacing: 0.05rem;
+  padding: 0.75rem 1rem;
+}
+
+.btn-google {
+  color: white !important;
+  background-color: #ea4335;
+}
+
+.btn-facebook {
+  color: white !important;
+  background-color: #3b5998;
+} */
+
+
+
+
+#myInput {
+  background-image: url('/css/searchicon.png');
+  /* Add a search icon to input */
+  background-position: 10px 12px;
+  /* Position the search icon */
+  background-repeat: no-repeat;
+  /* Do not repeat the icon image */
+  width: 21%;
+  height: 46px;
+  /* Full-width */
+  font-size: 16px;
+  /* Increase font-size */
+  padding: 12px 20px 12px 40px;
+  /* Add some padding */
+  border: 1px solid #ddd;
+  /* Add a grey border */
+  margin-bottom: 0px;
+  /* Add some space below the input */
+  margin-left: 20px;
+  border-color: rgb(104, 65, 141);
+}
+/* * {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+} */
+body {
+  background-color: #ffffff;
+  
+}
+table {
+  color: #000000;
+  font-size: .9em;
+  font-weight: 300;
+  line-height: 25px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 2px solid #ffffff;
+  width: 500px;
+  margin: 50px auto;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .16);
+  border-radius: 2px;
+}
+th {
+  background: #bbbbbb;
+  color: rgb(0, 0, 0);
+  border: none;
+}
+tr:hover:not(th) {
+  background-color: rgba(237, 28, 64, .1);
+}
+input[type="button"] {
+  transition: all .3s;
+  border: 1px solid #ddd;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 15px;
+}
+input[type="button"]:not(.active) {
+  background-color: transparent;
+}
+/* .active {
+  background-color: #000000;
+  color: #fff;
+} */
+input[type="button"]:hover:not(.active) {
+  background-color: rgb(168, 110, 206);
+}
+
+
+
+/* Active menu item */
+.nav-item.active {
+  background-color: #9c8282; /* Change the background color */
+}
+
+/* Active menu link */
+.nav-item.active .nav-link {
+  color: #000; /* Change the text color */
+}
+
+
+
+
+
+  /**
+ * FilePond Custom Styles
+ */
+.filepond--drop-label {
+	color: #4c4e53;
+}
+
+.filepond--label-action {
+	text-decoration-color: #babdc0;
+}
+
+.filepond--panel-root {
+	border-radius: 2em;
+	background-color: #edf0f4;
+	height: 1em;
+}
+
+.filepond--item-panel {
+	background-color: #595e68;
+}
+
+.filepond--drip-blob {
+	background-color: #7f8a9a;
+}
+
+
+/**
+ * Page Styles
+ */
+/* html {
+	padding:30vh 0 0;
+}
+
+body {
+	max-width: 20em;
+	margin: 0 auto;
+} */
+
+
+
+

@@ -1,0 +1,95 @@
+{{>user_headnav}}
+
+<style>
+  .address {
+    border: 1px solid rgb(255 158 32);
+    border-style: solid;
+    padding: 10px;
+    margin-bottom: 10px;
+    position: relative;
+  }
+
+  .address .options {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .address .options button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 16px;
+  }
+
+  .address .options button:hover {
+    background-color: lightgray;
+  }
+
+  .add-address {
+    margin-top: 20px;
+  }
+</style>
+<!-- End Header Area -->
+
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+  <div class="container">
+    <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+      <div class="col-first">
+        <h1>Login/Register</h1>
+        <nav class="d-flex align-items-center">
+          <a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+          <a href="category.html">Login/Register</a>
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Banner Area -->
+
+<!--================Login Box Area =================-->
+<section class="login_box_area section_gap">
+  <div class="container">
+    <h1>Add Address</h1>
+    <div class="container">
+      <h1>Address Collection</h1>
+      
+      <div id="addresses" >
+        {{#each address.address}}
+        <div class="address"  style="display: flex; justify-content: space-between;">
+          <div>
+          <p>{{this.street}}</p>
+          <p>{{this.district}}</p>
+          <p>{{this.state}}</p>
+          <p>{{this.country}}</p>
+          <p>{{this.pincode}}</p>
+          </div>
+          <div class="dropdown">
+            <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown"
+              aria-expanded="false"><span class="bi bi-three-dots-vertical"></span></button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li><a class="dropdown-item" href="/edit_address/{{this._id}}">Edit</a></li>
+              <li><a class="dropdown-item" href="/delete_address/{{this._id}}">Delete</a></li>
+            </ul>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    
+      <div class="add-address">
+       <a href="/add_address"> <button id="add-address-btn" class="btn primary-btn">Add New Address</button></a>
+      </div>
+    </div>
+
+  </div>
+</section>
+<!--================End Login Box Area =================-->
+
+<!-- start footer Area -->
+
+
+{{>user_footer}}

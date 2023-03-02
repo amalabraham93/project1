@@ -1,0 +1,133 @@
+{{>user_headnav}}
+<!-- End Header Area -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+<style>
+    .order-container {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .order-image {
+        max-width: 150px;
+        max-height: 150px;
+        margin-right: 20px;
+    }
+
+    .order-details {
+        display: flex;
+        align-items: center;
+    }
+
+    .order-details-btn {
+        margin-left: auto;
+    }
+
+    .order-details-btn .dropdown-toggle::after {
+        display: none;
+    }
+
+</style>
+<script>
+    $(document).ready(function () {
+        // Cancel Button Functionality
+        $('.cancel-btn').click(function () {
+            var orderNumber = $(this).closest('.order-container').find('.order-number').text();
+            $('#cancelModal #orderNumber').text(orderNumber);
+        });
+
+        // View Details Button Functionality
+        $('.details-btn').click(function () {
+            var orderNumber = $(this).closest('.order-container').find('.order-number').text();
+            var date = $(this).closest('.order-container').find('.order-date').text();
+            var totalAmount = $(this).closest('.order-container').find('.order-amount').text();
+            var status = $(this).closest('.order-container').find('.order-status').text();
+            var imageSrc = $(this).closest('.order-container').find('.order-image').attr('src');
+            $('#detailsModal #orderNumber').text(orderNumber);
+            $('#detailsModal #date').text(date);
+            $('#detailsModal #totalAmount').text(totalAmount);
+            $('#detailsModal #status').text(status);
+            $('#detailsModal #orderImage').attr('src', imageSrc);
+        });
+    });
+</script>
+
+
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Order History</h1>
+                <nav class="d-flex align-items-center">
+                    <a href="/">Home<span class="lnr lnr-arrow-right"></span></a>
+                    <a href="/profile">Profile</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
+
+<!--================Cart Area =================-->
+<section class="cart_area">
+    <div class="container">
+        <div class="container-fluid">
+            <h1 class="text-center">Order History</h1>
+            <div class="row">
+                <div class="col-md-12">
+                   {{#each orderdata.[0].order}}  
+                   <div class="order-container">
+                   
+                        <div class="order-details">
+                           
+                            <div>
+                         {{#each product}}
+                             <div>
+                            <img class="order-image" src="/productImages/{{this.product.image.[0]}}" style="width: 20%;">
+                            </div>
+                           {{/each}}
+                            </div>
+                            
+                            <div>
+                                <p class="order-number">Order Number: {{this.order_id}}</p>
+                                <p class="order-date">Date: {{formatDate this.order_date}}</p>
+
+                                <p class="order-amount">Total Amount: ${{this.bill_amount}}</p>
+                                <p class="order-status">Status: {{this.status}}</p>
+                            </div>
+                            <div class="order-details-btn">
+                               
+                                <div class="dropdown">
+                                    <button type="button" class="btn btn-light dropdown-toggle"
+                                        data-bs-toggle="dropdown" aria-expanded="false"><span
+                                            class="bi bi-three-dots-vertical"></span></button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><a class="dropdown-item" href="/order_details/{{this.order_id}}">View Order</a></li>
+                                        <li><a class="dropdown-item" href="/order_cancel/{{this.order_id}}">Cancel Order</a></li>
+                                    </ul>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    
+                    </div> 
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<!--================End Cart Area =================-->
+
+<!-- start footer Area -->
+
+{{>user_footer}}

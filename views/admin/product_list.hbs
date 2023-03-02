@@ -1,0 +1,151 @@
+{{>admin_nav}}
+
+
+
+<div class="col-lg-12 grid-margin stretch-card">
+  <div class="card">
+    <div class="card-body">
+
+      <p class="card-description mt-5">
+      <h1>PRODUCT MANAGEMENT</h1>
+      </p>
+      <a href="/admin/add_product" class="btn btn-outline-success btn-lg">Add new Product</a>
+      <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
+      <table class=" sortable table table-striped mt-5" id="myTable">
+        <thead>
+          <tr>
+            <th> Image </th>
+            <th> Name </th>
+            <th> Brand </th>
+            <th> Quantity</th>
+            <th> Category </th>
+            <th> Price </th>
+            <th> Edit </th>
+            <th> Remove </th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each products}}
+
+          <tr>
+            <td class="py-1" style="width: 8%;">
+              <img src="/productImages/{{this.image.[0]}}" alt="image"  style="width: 93%;"/>
+            </td>
+            <td>{{this.Name}}</td>
+            <td> {{this.Brand}} </td>
+            <td>{{this.Quantity}}</td>
+            <td>{{this.categoryid.categoryname}}</td>
+            <td>{{this.Price}}</td>
+            <td><a href="/admin/edit_products/{{this._id}} " class="btn btn-primary">Edit</a></td>
+            {{#if this.archive}}
+            <td> <button class="btn btn-danger" onclick="alertedUndo('{{this._id}}');">Unhide</button>
+            </td>
+            {{else}}
+            <td> <button class="btn btn-danger" onclick="alerted('{{this._id}}');">Hide</button>
+            </td>
+            {{/if}}
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{{!-- onclick="window.location.href = '/admin/delete-product/{{this._id}}';" --}}
+
+{{!-- onclick="window.location.href = '/admin/undoDelete-product/{{this._id}}';" --}}
+
+{{>admin_footer}}
+
+
+
+
+
+<script>
+    function searchTable() {
+        var input, filter, found, table, tr, td, i, j;
+        input = document.getElementById ("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td.length; j++) {
+                if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                }
+            }
+            if (found) {
+                tr[i].style.display = "";
+                found = false;
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+
+</script>
+
+
+
+
+<script>
+  function alerted(proId) {
+   
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, hide it!'
+    }).then((result) => {
+      $.ajax({
+        url: '/admin/delete-product/'+ proId,
+        method: 'post',
+        success: (response) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Product hided succesfuly',
+              showConfirmButton: false,
+            })
+            setTimeout(() => {
+              location.reload()
+            }, 800)
+          }
+        }
+      })
+    })
+  }
+  function alertedUndo(proId) {  
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, unhide  it!'
+    }).then((result) => {
+      $.ajax({
+        url: '/admin/undoDelete-product/'+ proId,
+        method: 'post',
+        success: (response) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              icon: 'success',
+              title: 'product is unhided',
+              showConfirmButton: false,
+            })
+            setTimeout(() => {
+              location.reload()
+            }, 800)
+          }
+        }
+      })
+    })
+  }
+</script>

@@ -1,0 +1,169 @@
+<nav class="navbar navbar-dark" style="background-color: rgb(0, 0, 0);">
+    <div class="container-fluid" id="login">
+        <h1><a class="navbar-brand" style="color: #fff;">WELCOME</a></h1>
+        <form class="d-flex ml-auto" role="search">
+            <h5 style="color: #fff;">Admin Panel</h5>
+            <div class="dropdown px-5">
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                    id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false" style=" color:#fff">
+                    <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
+                    <span class="d-none d-sm-inline mx-1">Admin</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                    <li><a class="dropdown-item" href="#">New project...</a></li>
+                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="/admin/adminlogout">Sign out</a></li>
+                </ul>
+            </div>
+        </form>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 " style="background-color: black;">
+            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                    <span class="fs-5 d-none d-sm-inline">Menu</span>
+                </a>
+                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu"
+                    data-bs-toggle="collapse" aria-expanded="false">
+                    <li class="nav-item active">
+                        <a href="/admin/admin_dashboard" class="nav-link align-middle px-0 " style=" color:#fff;">
+                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">DASHBOARD</span>
+                        </a>
+                    </li>
+
+
+                    {{!-- users --}}
+                    <liclass="nav-item active">
+                        <a href="/admin/userslist" class="nav-link align-middle px-0" style=" color:#fff">
+                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">USERS LIST</span>
+                        </a>
+                    </li>
+
+
+
+                    {{!-- employees --}}
+                    {{log admin.super_admin}}
+                    {{#if admin.super_admin}}
+                    <li class="nav-item active">
+                        <a href="#submenu0" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
+                            style="color:#fff">
+                            <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">EMPLOYEES</span>
+                        </a>
+                        <ul class="collapse  nav flex-column ms-1" id="submenu0" data-bs-parent="#menu">
+                            <li class="nav-item active">
+                                <a href="/admin/employee_list" class="nav-link px-0" style="color:#fff"> <span
+                                        class="d-none d-sm-inline">EMPLOYEES LIST</span>
+                                </a>
+                            </li>
+                            <li class="nav-item active">
+                                <a href="/admin/add_employee" class="nav-link px-0" style=" color:#fff"> <span
+                                        class="d-none d-sm-inline">ADD EMPLOYEE</span> </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    {{/if}}
+
+
+                    {{!-- categories --}}
+                    <li class="nav-item active" >
+                        <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
+                            style="color:#fff">
+                            <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">CATEGORIES</span>
+                        </a>
+                        <ul class="collapse  nav flex-column ms-1" id="submenu1" data-bs-parent="#menu"
+                            aria-expanded="false">
+                            <li class="nav-item active">
+                                <a href="/admin/category" class="nav-link px-0" style="color:#fff"> <span
+                                        class="d-none d-sm-inline">CATEGORY LIST</span>
+                                </a>
+                            </li>
+                            <li class="nav-item active">
+                                <a href="/admin/addcategory" class="nav-link px-0" style=" color:#fff"> <span
+                                        class="d-none d-sm-inline">ADD CATEGORY</span> </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    {{!-- Product List --}}
+                    <li class="nav-item active">
+                        <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
+                            style=" color:#fff">
+                            <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">PRODUCTS</span>
+                        </a>
+                        <ul class="collapse  nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
+                            <li class="nav-item active">
+                                <a href="/admin/productlist" class="nav-link px-0" style=" color:#fff"> <span
+                                        class="d-none d-sm-inline">PRODUCT LIST</span>
+                                </a>
+                            </li>
+                            <li class="nav-item active">
+                                <a href="/admin/add_product" class="nav-link px-0" style=" color:#fff"> <span
+                                        class="d-none d-sm-inline">ADD PRODUCT</span> </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    {{!-- ORDER --}}
+                    <li class="nav-item active">
+                        <a href="/admin/order_list" class="nav-link align-middle px-0" style=" color:#fff">
+                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">ORDERS</span>
+                        </a>
+                    </li>
+                    {{!-- STOCK --}}
+                    <li class="nav-item active">
+                        <a href="/admin/stock_list" class="nav-link align-middle px-0" style=" color:#fff">
+                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">STOCK LIST</span>
+                        </a>
+                    </li>
+                    {{!-- COUPONS --}}
+                    <li class="nav-item active">
+                        <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
+                            style=" color:#fff">
+                            <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">COUPONS</span>
+                        </a>
+                        <ul class="collapse  nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+                            <li class="nav-item active">
+                                <a href="/admin/coupon_list" class="nav-link px-0" style=" color:#fff"> <span
+                                        class="d-none d-sm-inline">COUPON LIST</span>
+                                </a>
+                            </li>
+                            <li class="nav-item active">
+                                <a href="/admin/add_coupons" class="nav-link px-0" style=" color:#fff"> <span
+                                        class="d-none d-sm-inline">ADD COUPON</span> </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <hr>
+                {{!-- <div class="dropdown pb-4">
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                        id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false" style=" color:#fff">
+                        <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30"
+                            class="rounded-circle">
+                        <span class="d-none d-sm-inline mx-1">Admin</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                        <li><a class="dropdown-item" href="#">New project...</a></li>
+                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="/admin/adminlogout">Sign out</a></li>
+                    </ul>
+                </div> --}}
+            </div>
+        </div>
+
+        {{!-- user table --}}
+        <div class="col py-3">
+            <div class="container">
+                <div class="row">

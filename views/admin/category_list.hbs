@@ -1,0 +1,69 @@
+{{>admin_nav}}
+
+<input type="text" id="myInput" onkeyup="searchTable()" placeholder="Search for names.." title="Type in a name">
+<table class="table table-striped table-hover" id="myTable">
+    <thead>
+        <tr>
+            <th scope="col">no.</th>
+            <th scope="col">Category Name</th>
+            <th scope="col">Discription</th>
+            <th scope="col">Created on</th>
+            <th scope="col">Status</th>
+            <th scope="col">Disabled</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each category}}
+        <tr>
+            <th scope="row">{{inc @index}}</th>
+            <td>{{this.categoryname}}</td>
+            <td>{{this.discription}}</td>
+            <td>{{this.created_date}}</td>
+            <td>{{this.status}}</td>
+            <td>{{this.delete}}</td>
+            <td><a class="me-3" href="/admin/disablecategory?id={{this._id}}"><img style="width: 20px; height: 20px;"
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfa2wIQ4rnOR8UqcAhGbCzkURBHlke9bthbcbdT0Axq5XvHRyPGsf5fLP_Cmoznj21duU&usqp=CAU"
+                        alt=""></a>
+                <a class="ml-3 me-3" href="/admin/enablecategory?id={{this._id}}"><img
+                        style="width: 20px; height: 20px;"
+                        src="https://w7.pngwing.com/pngs/383/791/png-transparent-check-mark-green-tick-miscellaneous-trademark-logo.png"
+                        alt=""></a>
+
+                <a class="ml-3" href="/admin/editcategory?id={{this._id}}"><img style="width: 20px; height: 20px;"
+                        src="https://toppng.com//public/uploads/preview/junior-icon-editor-free-download-for-windows-edit-icon-blue-1156302584549wxzpwmhr.png"
+                        alt=""></a>
+            </td>
+            <td></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+{{>admin_footer}}
+
+<script>
+    function searchTable() {
+        var input, filter, found, table, tr, td, i, j;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td.length; j++) {
+                if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                }
+            }
+            if (found) {
+                tr[i].style.display = "";
+                found = false;
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+
+</script>
+
+

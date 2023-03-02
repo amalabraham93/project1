@@ -1,0 +1,174 @@
+<style>
+    .address {
+        border: 1px solid rgb(255 158 32);
+        border-style: solid;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: relative;
+    }
+
+    .address .options {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .address .options button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 5px;
+        font-size: 16px;
+    }
+
+    .address .options button:hover {
+        background-color: lightgray;
+    }
+
+    .add-address {
+        margin-top: 20px;
+    }
+</style>
+
+
+
+{{>user_headnav}}
+
+
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Checkout</h1>
+                <nav class="d-flex align-items-center">
+                    <a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+                    <a href="single-product.html">Checkout</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
+
+<!--================Checkout Area =================-->
+<section class="order_details section_gap">
+	
+		<div class="container">
+			<h3 class="title_confirmation">Thank you. Your order has been received.</h3>
+			
+			{{!-- {{#each latestorder}} --}}
+			<div class="row order_d_inner">
+				<div class="col-lg-4">
+					<div class="details_item">
+						<h4>Order Info</h4>
+						<ul class="list">
+							<li><a href="#"><span>Order number</span> : {{latestorder.order_id}}</a></li>
+							<li><a href="#"><span>Date</span> : {{formatDate latestorder.order_date}}</a></li>
+							<li><a href="#"><span>Total</span> : {{latestorder.bill_amount}}</a></li>
+							<li><a href="#"><span>Payment method</span> : {{latestorder.payment_method}}</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-lg-4"></div>
+				
+				<div class="col-lg-4">
+					<div class="details_item">
+						<h4>Shipping Address</h4>
+						<ul class="list">
+							<li>{{latestorder.delivery_address}}</li>
+							
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="order_details_table">
+				
+				<h2>Order Details</h2>
+				<p>order id :{{latestorder.order_id}}</p>
+				<div class="table-responsive">
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col">Product</th>
+								<th scope="col">Quantity</th>
+								<th scope="col">Price</th>
+								<th scope="col">Total</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							{{#each latestorder.product}}
+							<tr>
+								<td>
+									<p>{{this.product.Name}}</p>
+								</td>
+								<td>
+									<h5>x {{this.quantity}}</h5>
+								</td>
+								<td>
+									<p>${{this.product.Price}}</p>
+								</td>
+								<td>
+									<p>${{this.total}}</p>
+								</td>
+							</tr>
+							
+							{{/each}}
+							<tr>
+								<td>
+									<h4>Subtotal</h4>
+								</td>
+								<td>
+									<h5></h5>
+								</td>
+								<td>
+									<p>${{latestorder.total}}</p>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<h4>Shipping</h4>
+								</td>
+								<td>
+									<h5></h5>
+								</td>
+								<td>
+									<p>Flat rate: $5.00</p>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<h4>coupon</h4>
+								</td>
+								<td>
+									<h5></h5>
+								</td>
+								<td>
+									<p>Discount: {{latestorder.coupon_discount}}</p>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<h4>Total</h4>
+								</td>
+								<td>
+									<h5></h5>
+								</td>
+								<td>
+									<p>${{latestorder.bill_amount}}</p>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				
+			</div>
+		</div>
+		{{!-- {{/each}} --}}
+	</section>
+<!--================End Checkout Area =================-->
+
+
+{{>user_footer}}

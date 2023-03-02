@@ -1,0 +1,87 @@
+{{>admin_nav}}
+
+
+
+<div class="col-lg-10 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <div class="container">
+                <div class="row justify-content-start">
+                    <div class="col-md-12">
+                        <h1>Order Details</h1>
+                        <hr>
+                        {{#each orderdata.[0].order}}
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>{{this.order_id}}</h5>
+                            </div>
+                            <div class="card-body">
+                                <div style="display:flex;justify-content:space-between;">
+                                    <div>
+                                        <h6>Status</h6>
+                                        <p>{{status}}</p>
+                                    </div>
+                                    <div>
+                                        <h6>Order Date:</h6>
+                                        <p>{{formatDate order_date}}</p>
+                                    </div>
+                                </div>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Product Name</th>
+                                            <th>Quantity</th>
+                                            <th>Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each product}}
+                                        <tr>
+                                            <td>{{this.product.Name}}</td>
+                                            <td>{{this.quantity}}</td>
+                                            <td>${{this.product.Price}}</td>
+                                        </tr>
+                                        {{/each}}
+                                </table>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5>Shipping Address</h5>
+                                        <p>{{delivery_address}}</p>
+
+
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>Order Summary</h5>
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Subtotal:</td>
+                                                    <td>${{this.total}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Shipping:</td>
+                                                    <td>$5.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Total:</strong></td>
+                                                    <td><strong>${{bill_amount}}</strong></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+{{>admin_footer}}

@@ -1,0 +1,373 @@
+<style>
+    @import url(http://fonts.googleapis.com/css?family=Calibri:400,300,700);
+
+{{!-- body {
+    background-color: #eee;
+    font-family: 'Calibri', sans-serif !important;
+} --}}
+
+.mt-100{
+   margin-top:100px;
+
+}
+
+
+{{!-- .card {
+    margin-bottom: 30px;
+    border: 0;
+    -webkit-transition: all .3s ease;
+    transition: all .3s ease;
+    letter-spacing: .5px;
+    border-radius: 8px;
+    -webkit-box-shadow: 1px 5px 24px 0 rgba(68,102,242,.05);
+    box-shadow: 1px 5px 24px 0 rgba(68,102,242,.05);
+} --}}
+
+{{!-- .card .card-header {
+    background-color: #fff;
+    border-bottom: none;
+    padding: 24px;
+    border-bottom: 1px solid #f6f7fb;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+} --}}
+
+{{!-- .card-header:first-child {
+    border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;
+} --}}
+
+
+
+.card .card-body {
+    padding: 30px;
+    background-color: transparent;
+}
+
+.btn-primary, .btn-primary.disabled, .btn-primary:disabled {
+    background-color: #4466f2!important;
+    border-color: #4466f2!important;
+}
+</style>
+
+
+
+{{>user_headnav}}
+<!-- End Header Area -->
+
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Shopping Cart</h1>
+                <nav class="d-flex align-items-center">
+                    <a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+                    <a href="category.html">Cart</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
+
+<!--================Cart Area =================-->
+<section class="cart_area">
+    <div class="container">
+         {{#if empty}}
+         <div class="card-body cart">
+								<div class="col-sm-12 empty-cart-cls text-center">
+									<img src="https://i.imgur.com/dCdflKN.png" width="130" height="130" class="img-fluid mb-4 mr-3">
+									<h3><strong>Your Cart is Empty</strong></h3>
+									<h4>Add something to make me happy :)</h4>
+									<a href="/product_list" class="btn primary-btn cart-btn-transform m-3" data-abc="true">continue shopping</a>
+									
+								
+								</div>
+						</div>
+         {{else}}
+        <div class="cart_inner">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            
+                            <th scope="col">Product</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Total</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each cart1.cart }}
+                        <tr>
+                            
+                            <td name="name{{@index}}">
+                                <div class="media">
+                                    <div class="d-flex">
+                                        <img src="/productImages/{{this.productid.image.[0]}}" style="width: 10%;"
+                                            alt="product img">
+                                        <div class="media-body">
+                                            <p name="name{{@index}}">{{this.productid.Name}}</p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+                            <td  name="price{{@index}}">
+                                <h5 id="price">{{this.productid.Price}}</h5>
+                            </td>
+                            <td name="quantity">
+                                <div class="product_count">
+
+
+                                    <input type="text" name="qty" id="main-container" maxlength="12"
+                                        value="{{this.quantity}}" title="Quantity:" class="input-text qty" readonly>
+                                    {{!-- <a id="inc" href="/incqty/{{this.productid._id}}">
+                                        <button class="increase items-count" type="button"><i
+                                                class="lnr lnr-chevron-up"></i></button>
+                                    </a>
+                                    <a id="dec" href="/decqty/{{this.productid._id}}">
+                                        <button class="reduced items-count" type="button"><i
+                                                class="lnr lnr-chevron-down"></i></button>
+                                    </a> --}}
+                                    <a id="inc" href="/incqty/{{this.productid._id}}" >
+                                        <button class="increase items-count" type="button"><i
+                                                class="lnr lnr-chevron-up"></i></button>
+                                    </a>
+                                    <a id="dec" href="/decqty/{{this.productid._id}}" >
+                                        <button class="reduced items-count" type="button"><i
+                                                class="lnr lnr-chevron-down"></i></button>
+                                    </a>
+
+                                </div>
+                            </td>
+                            <td id="totalOutput{{@index}}" name="totalprice">
+                                <h5 id="sst">${{total this.quantity this.productid.Price}}</h5>
+                                <input type="hidden" name="totalprice{{@index}}"
+                                    id="total1" value="{{total this.quantity this.productid.Price}}">
+                            </td>
+                            <td><a class="remove" style="color:rgb(248, 5, 5)"
+                                    href="/remove_from_cart/{{this.productid._id}}">
+                                    <fa class="fa fa-close"></fa>
+                                </a></td>
+                        </tr>
+                        {{/each}}
+
+                        <tr class="bottom_button">
+                            <td>
+                                <a class="gray_btn" href="#">Update Cart</a>
+                            </td>
+                            <td>
+
+                            </td>
+                            <td>
+
+                            </td>
+                            <td>
+                                <div class="cupon_text d-flex align-items-center">
+                                    <input type="text" placeholder="Coupon Code">
+                                    <a class="primary-btn" href="#">Apply</a>
+                                    <a class="gray_btn" href="#">Close Coupon</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+
+                            </td>
+                            <td>
+
+                            </td>
+                            <td>
+                                <h5>Subtotal</h5>
+                            </td>
+                            <td id="sst" class="subtotal" name="subtotal">
+                                <h5>$ {{calculateTotal cart1.cart}}</h5>
+                                <input type="hidden" name="subtotal" value="{{calculateTotal cart1.cart}}">
+                            </td>
+                        </tr>
+                        {{!-- <tr class="shipping_area">
+                            <td>
+
+                            </td>
+                            <td>
+
+                            </td>
+                            <td>
+                                <h5>Shipping</h5>
+                            </td>
+                            <td>
+                                <div class="shipping_box">
+                                    <ul class="list">
+                                        <li><a href="#">Flat Rate: $5.00</a></li>
+                                        <li><a href="#">Free Shipping</a></li>
+                                        <li><a href="#">Flat Rate: $10.00</a></li>
+                                        <li class="active"><a href="#">Local Delivery: $2.00</a></li>
+                                    </ul>
+                                    <h6>Calculate Shipping <i class="fa fa-caret-down" aria-hidden="true"></i></h6>
+                                    <select class="shipping_select">
+                                        <option value="1">Bangladesh</option>
+                                        <option value="2">India</option>
+                                        <option value="4">Pakistan</option>
+                                    </select>
+                                    <select class="shipping_select">
+                                        <option value="1">Select a State</option>
+                                        <option value="2">Select a State</option>
+                                        <option value="4">Select a State</option>
+                                    </select>
+                                    <input type="text" placeholder="Postcode/Zipcode">
+                                    <a class="gray_btn" href="#">Update Details</a>
+                                </div>
+                            </td>
+                        </tr>--}}
+                        <tr class="out_button_area">
+                            <td>
+
+                            </td>
+                            <td>
+
+                            </td>
+                            <td>
+
+                            </td>
+                            <td>
+                       
+
+                        
+
+                                <div class="checkout_btn_inner d-flex align-items-center">
+                                    <a class="gray_btn" href="/product_list">Continue Shopping</a>
+                                    <a class="primary-btn"
+                                        href="/checkout?subtotal={{calculateTotal cart1.cart}}">Proceed to checkout</a>
+                                </div>
+                        {{/if}}
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+<!--================End Cart Area =================-->
+
+<!-- start footer Area -->
+
+{{>user_footer}}
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.pjax/2.0.1/jquery.pjax.min.js"></script>
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+
+
+<script>
+    $(document).ready(function (event) {
+        $('.increase').on('click', function () {
+            event.preventDefault();
+            let price = $('#price').val()
+            let currentQty = parseInt($(this).siblings('.qty').val());
+            let newQty = currentQty + 1;
+           
+            let url = $(this).parent().siblings('.remove').attr('href');
+            $.ajax({
+
+                url: url,
+                method: 'GET',
+                success: function (response) {
+                     console.log(response)
+                    $('input[name="qty"]').val(newQty);
+                   //  {{!-- $('#total1').val( newQty * price);
+                     // $('#sst').val( newQty * price);  --}}
+
+                    }
+             },
+                
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+        );
+        });
+
+        $('.reduced').on('click', function ( event) {
+            event.preventDefault();
+            console.log('hdajkdhfka')
+            var currentQty = parseInt($(this).siblings('.qty').val());
+            if (currentQty > 1) {
+                var newQty = currentQty - 1;
+                var url = $(this).parent().siblings('.remove').attr('href');
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function (data) {
+                        $('input[name="qty"]').eq(data.index).val(newQty);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+
+
+
+
+{{!--
+<script>
+    function incqty(id) {
+        $.ajax({
+            url: '/incqty/' + id,
+            type: 'GET',
+            success: function (response) {
+                $('#sst').html(response);
+            }
+        });
+    }
+
+    function decqty(id) {
+        $.ajax({
+            url: '/decqty/' + id,
+            type: 'GET',
+            success: function (response) {
+                $('#sst').html(response);
+            }
+        });
+    }
+</script> --}}
+
+
+
+
+
+
+{{!-- <script>
+ $(document).pjax('a', '#main-container')
+
+
+
+$(document).on('pjax:end', function() {
+  // update the subtotal
+  var subtotal = calculateTotal(cart1.cart);
+  $('td.subtotal h5').text('$ ' + subtotal);
+  $('td.subtotal input').val(subtotal);
+
+  // update the total for each product
+  $('tbody tr').each(function() {
+    var qty = parseInt($(this).find('input.qty').val());
+    var price = parseFloat($(this).find('td#price h5').text());
+    var total = qty * price;
+    $(this).find('td[name="totalprice"] h5').text('$' + total);
+    $(this).find('td[name="totalprice"] input').val(total);
+  });
+});
+</script> --}}

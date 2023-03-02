@@ -1,0 +1,145 @@
+{{>admin_nav}}
+<div class="col-lg-12 grid-margin stretch-card">
+  <div class="card">
+    <div class="card-body">
+<input type="text" id="myInput" onkeyup="searchTable()" placeholder="Search for names.." title="Type in a name">
+<table class="table table-striped table-hover" id="myTable">
+    <thead>
+        <tr>
+            <th scope="col">no.</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Created on</th>
+            <th scope="col">Blocked</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each users}}
+        <tr>
+            <th scope="row">{{inc @index}}</th>
+            <td>{{this.name}}</td>
+            <td>{{this.email}}</td>
+            <td>{{this.phone}}</td>
+            <td>{{formatDate this.createdAt}}</td>
+            <td>{{this.block}}</td>
+            {{!-- <td><a class="me-3" href="/admin/blockuser?id={{this._id}}"><img style="width: 20px; height: 20px;"
+                        src="https://www.onlygfx.com/wp-content/uploads/2022/03/red-circle-round-3d-button-1-cover.jpg"
+                        alt=""></a>
+                <a class="ml-3" href="/admin/unblockuser?id={{this._id}}"><img style="width: 20px; height: 20px;"
+                        src="https://www.freeiconspng.com/uploads/green-circle-icon-28.png" alt=""></a>
+            </td> --}}
+            {{#if this.block}}
+            <td> <button class="btn btn-danger" onclick="alertedUndo('{{this._id}}');">
+                {{!-- <a
+                        href="/admin/blockuser?id={{this._id}}"
+                        style="text-decoration: none; color: #fff;"></a> --}}
+                       Unblock </button>
+            </td>
+            {{else}}
+            <td> <button class="btn btn-success" onclick="alerted('{{this._id}}');">
+                {{!-- <a
+                        href="/admin/unblockuser?id={{this._id}}"
+                        style="text-decoration: none; color: #fff;">
+                        </a> --}}
+                       Block </button>
+            </td>
+            {{/if}}
+            <td></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+    </div>
+  </div>
+</div>
+
+{{>admin_footer}}
+
+<script>
+    function searchTable() {
+        var input, filter, found, table, tr, td, i, j;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td.length; j++) {
+                if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                }
+            }
+            if (found) {
+                tr[i].style.display = "";
+                found = false;
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+
+</script>
+
+
+<script>
+  function alerted(proId) {
+    console.log(proId)
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, block it!'
+    }).then((result) => {
+      $.ajax({
+        url: '/admin/blockuser/'+ proId,
+        method: 'get',
+        success: (response) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              icon: 'success',
+              title: 'User blocked succesfuly',
+              showConfirmButton: false,
+            })
+            setTimeout(() => {
+              location.reload()
+            }, 800)
+          }
+        }
+      })
+    })
+  }
+  function alertedUndo(proId) {
+    console.log("working???????????????????")
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, Unblock  it!'
+    }).then((result) => {
+      $.ajax({
+        url: '/admin/unblockuser/'+ proId,
+        method: 'get',
+        success: (response) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              icon: 'success',
+              title: 'User is Unblocked',
+              showConfirmButton: false,
+            })
+            setTimeout(() => {
+              location.reload()
+            }, 800)
+          }
+        }
+      })
+    })
+  }
+</script>

@@ -1,0 +1,159 @@
+
+
+{{>admin_nav}}
+
+
+<div class="col-12 grid-margin stretch-card">
+  {{!-- <img class="mt-5" src="https://cdn.learnwoo.com/wp-content/uploads/2016/11/Adding-Products_Cropped.png"
+    width="450px" height="400px" alt=""> --}}
+  <div class="card">
+    <div class="card-body">
+      <p class="card-description mt-5 mb-5">
+      <h2>Add Product</h2>
+      </p>
+      <form action="/admin/add_product" enctype="multipart/form-data" method="post" class="forms-sample mt-5">
+        <div class="form-group col-5">
+          <label for="exampleInputName1">Name</label>
+          <input type="text" name="Name" class="form-control" id="exampleInputName1" placeholder="Name" required="">
+        </div>
+        <div class="form-group col-5">
+          <label for="exampleInputEmail3">Brand Name</label>
+          <input type="text" name="Brand" class="form-control" id="exampleInputEmail3" placeholder="Brand" required="">
+        </div>
+        <div class="form-group col-5">
+          <label for="exampleInputPassword4">Quantity</label>
+          <input type="number" name="Quantity" class="form-control" id="exampleInputPassword4" placeholder="QTY"
+            required="">
+        </div>
+        <div class="form-group col-3">
+          <label for="exampleSelectGender">Category</label>
+
+          <select class="form-control text-dark" name="categoryname" id="exampleSelectGender" required="">
+            {{#each categorys}}
+            <option>{{this.categoryname}}</option>
+            {{/each}}
+
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="form-control-file">Image</label><br>
+         
+          <img src="/productImages/{{products.image}}" alt="" style="height:auto;width:50px" id="imgView">
+         
+          <input type="file" name="productImage" onchange="viewImage(event)" class="form-control-file mt-2" id="Image"
+            multiple>
+            
+            {{!-- filepond --}}
+          {{!-- <input type="file" class="filepond" name="productImage" name="filepond" multiple data-max-file-size="3MB" data-max-files="3" /> --}}
+       
+               {{!-- <form action="/add_product" method="post" enctype="multipart/form-data" >
+              <input type="file" name="images" class="filepond" multiple>
+              <button type="submit">Upload</button>
+               </form> --}}
+
+        </div>
+        <div class="form-group col-5">
+          <label for="exampleInputCity1">Price</label>
+          <input type="number" name="Price" class="form-control" id="exampleInputCity1" placeholder="Amount"
+            required="">
+        </div>
+        <div class="form-group col-5">
+          <label for="exampleFormControlTextarea1">Product Description</label>
+          <textarea class="form-control" name="Description" id="exampleFormControlTextarea1" rows="3"
+            required=""></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
+        <button class="btn btn-light">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+{{>admin_footer}}
+
+
+
+
+
+
+
+
+{{!-- FilePond.registerPlugin(FilePondPluginImagePreview); --}}
+
+
+
+<script>
+  function viewImage(event) {
+    document.getElementById('imgView').src = URL.createObjectURL(event.target.file[0])
+  }
+</script>
+
+
+
+ <script>
+
+  /*
+We want to preview images, so we need to register the Image Preview plugin
+*/
+FilePond.registerPlugin(
+	
+	// encodes the file as base64 data
+  FilePondPluginFileEncode,
+	
+	// validates the size of the file
+	FilePondPluginFileValidateSize,
+	
+	// corrects mobile image orientation
+	FilePondPluginImageExifOrientation,
+	
+	// previews dropped images
+  FilePondPluginImagePreview
+);
+
+// Select the file input and use create() to turn it into a pond
+FilePond.create(
+	document.querySelector('input')
+);
+</script>
+
+
+
+{{!-- <script>
+    FilePond.registerPlugin(
+      FilePondPluginImagePreview
+    );
+
+    FilePond.setOptions({
+      imagePreviewHeight: 100,
+      imagePreviewWidth: 100
+    });
+
+    const inputElement = document.querySelector('input.filepond');
+    const pond = FilePond.create(inputElement);
+  </script> --}}
+  {{!-- <script>
+    FilePond.registerPlugin(
+      FilePondPluginImagePreview,
+      FilePondPluginImageResize,
+      FilePondPluginFileEncode
+    );
+
+    FilePond.setOptions({
+      server: {
+        url: '/add_product',
+        process: (fieldName, file, metadata, load, error, progress, abort) => {
+          const formData = new FormData();
+          formData.append(fieldName, file, file.name);
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', '/add_product');
+          xhr.send(formData);
+        }
+      }
+    });
+
+    FilePond.parse(document.body);
+  </script> --}}
