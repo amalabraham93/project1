@@ -69,7 +69,7 @@
         <form id="form2">
             <div class="billing_details">
                 <div class="row">
-                    <div class="col-lg-8">
+                    <div class="col-lg-8" id="address">
                         <h3>Billing Details</h3>
                         <div id="addresses ">
 
@@ -80,7 +80,7 @@
                                 <input type="radio" id="address{{@index}}" name="address" style="margin-right: 10%;"
                                     form="form2"
                                     value="{{this.street}},{{this.district}},{{this.state}},{{this.country}} - {{this.pincode}}">
-                                <div id="address">
+                                <div >
                                     <p>{{this.street}},
                                         {{this.district}},
                                         {{this.state}},

@@ -7,7 +7,7 @@ module.exports={
         
         }else{
          user = false
-            // res.redirect('/')
+            res.redirect('/login')
         }
         next()
      } catch (error) {

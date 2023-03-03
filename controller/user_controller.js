@@ -8,21 +8,12 @@ const Otpverification = require("../model/otpverification_schema");
 const nodemailer = require("../controller/nodemailer");
 const Coupon = require("../model/coupon_schema");
 const Payment = require("../controller/payment_gateway");
-const Razorpay = require('razorpay')
+const Razorpay = require("razorpay");
 
 var instance = new Razorpay({
-  key_id: 'rzp_test_g5RMF7tYWVvJgS',
-  key_secret: 'rygNBsuv7VhbANu61bV29OHa',
+  key_id: "rzp_test_g5RMF7tYWVvJgS",
+  key_secret: "rygNBsuv7VhbANu61bV29OHa",
 });
-
-
-
-
-
-
-
-
-
 
 // const otpverification = require('../model/otpverification_schema')
 var session;
@@ -113,12 +104,16 @@ module.exports = {
           userdata,
           user: req.session.userid,
         });
-        console.log(userdata);
+        // console.log("tttttttt"+userdata);
       }
-      res.redirect("/login");
-
+      // res.redirect("/login");
+      res.render("users/profile", {
+        layout: "layout",
+        userdata,
+        user: req.session.userid,
+      });
     } catch (error) {
-      next(err);
+      next(error);
     }
   },
 
@@ -265,7 +260,7 @@ module.exports = {
 
         console.log(userdata);
 
-        res.json({success:true})
+        res.json({ success: true });
       }
     } catch (error) {
       next(error);
@@ -475,7 +470,7 @@ module.exports = {
 
   getAllProducts: async (req, res, next) => {
     try {
-      let category = await Category.find({}).lean()
+      let category = await Category.find({}).lean();
       let products = await productCollection.find({ archive: false }).lean();
       // let categorys = await Category.find({delete:false}).lean()
       console.log(products);
@@ -483,7 +478,8 @@ module.exports = {
 
       res.render("users/productlist", {
         layout: "layout",
-        products,category,
+        products,
+        category,
         user: req.session.userid,
       });
     } catch (error) {
@@ -491,19 +487,21 @@ module.exports = {
     }
   },
 
-
-
   categoryfiltter: async (req, res, next) => {
     try {
-      let category_id = req.params.id
-      let category = await Category.find({}).lean()
-      let products = await productCollection.find({ archive: false ,categoryid: category_id, }).populate('categoryid').lean();
+      let category_id = req.params.id;
+      let category = await Category.find({}).lean();
+      let products = await productCollection
+        .find({ archive: false, categoryid: category_id })
+        .populate("categoryid")
+        .lean();
       // let categorys = await Category.find({delete:false}).lean()
       console.log(products);
       // res.render('users/product_list',{ layout:'layout'})
 
       res.render("users/productlist", {
-        layout: "layout",category,
+        layout: "layout",
+        category,
         products,
         user: req.session.userid,
       });
@@ -738,14 +736,14 @@ module.exports = {
         const userdata = await User.updateOne(
           { email: req.session.userid, "cart.productid": id },
           { $inc: { "cart.$.quantity": 1 } }
-        ).then((response)=>{
-          res.json(response)
-        })
+        ).then((response) => {
+          res.json(response);
+        });
         // res.send(response)
         console.log(userdata);
         // res.json({success:true})
         // res.redirect("/cart");
-        res.json(response)
+        res.json(response);
       }
     } catch (error) {
       next(error);
@@ -898,23 +896,23 @@ module.exports = {
         )[0];
 
         if (req.body.payment_method == "cash_on_delivery") {
-          res.json({codstatus:true});
-          console.log('jhadskhkasdhflsjkhaf')
+          res.json({ codstatus: true });
+          console.log("jhadskhkasdhflsjkhaf");
         } else {
-            let orderid= latestorder.order_id
-          console.log(latestorder.bill_amount)
+          let orderid = latestorder.order_id;
+          console.log(latestorder.bill_amount);
           console.log(latestorder.order_id);
           let options = {
-            amount: latestorder.bill_amount * 100,  // amount in the smallest currency unit
+            amount: latestorder.bill_amount * 100, // amount in the smallest currency unit
             currency: "INR",
-            receipt: 'orderid124565451',
+            receipt: "orderid124565451",
             payment_capture: true,
-            notes: {},  
-           };
-         instance.orders.create(options, function(err, order) {
-              console.log(order);
-            res.json(order)
-        });
+            notes: {},
+          };
+          instance.orders.create(options, function (err, order) {
+            console.log(order);
+            res.json(order);
+          });
         }
 
         // console.log(orderdata);
@@ -938,77 +936,106 @@ module.exports = {
         const latestorder = orderdata.order.sort(
           (a, b) => b.order_date - a.order_date
         )[0];
-        
-        console.log('fgnzdfbgsfghgzh',latestorder);
+
+        console.log("fgnzdfbgsfghgzh", latestorder);
 
         // res.send(response)
         // console.log(orderdata);
-        res.render("users/confirmation", { layout: "layout", user: req.session.userid, latestorder});
+        res.render("users/confirmation", {
+          layout: "layout",
+          user: req.session.userid,
+          latestorder,
+        });
       }
     } catch (error) {
       next(error);
     }
   },
 
-
   verifypay: async (req, res, next) => {
     try {
-      if (req.session.userid) { 
-        console.log(req.body)
+      if (req.session.userid) {
+        console.log(req.body);
         // let payment = req.body.response
         // let order = req.body.order
         // console.log(req.body)
-        console.log(req.body['response[razorpay_order_id]']);
+        console.log(req.body["response[razorpay_order_id]"]);
 
-       
+        const crypto = require("crypto");
+        let hmac = crypto.createHmac("sha256", "rygNBsuv7VhbANu61bV29OHa");
+        hmac.update(
+          req.body["response[razorpay_order_id]"] +
+            "|" +
+            req.body["response[razorpay_payment_id]"]
+        );
+        hmac = hmac.digest("hex");
+        console.log(hmac == req.body["response[razorpay_signature]"]);
+        if (hmac === req.body["response[razorpay_signature]"]) {
+          console.log("payment succesfull");
+          // orderId = req.body['order[id]']
+          // console.log(orderId);
+          console.log("verifyied");
 
-        const crypto = require('crypto')
-        let hmac = crypto.createHmac('sha256', 'rygNBsuv7VhbANu61bV29OHa')
-        hmac.update(req.body['response[razorpay_order_id]'] + '|' + req.body['response[razorpay_payment_id]'])
-        hmac = hmac.digest('hex')
-        console.log(hmac == req.body['response[razorpay_signature]']);
-        if (hmac === req.body['response[razorpay_signature]']) {
-            console.log("payment succesfull");
-            // orderId = req.body['order[id]']
-            // console.log(orderId);
-            console.log('verifyied');
-          //   const orderdata = await User.findOne({ email: req.session.userid }, { order: { $slice: -1 } }).sort({ "order.order_date": -1 })
-          //   .populate("order.product.product")
-          //   .lean();
-          //  console.log( orderdata.order[0].status);
-          //  orderdata.order[0].status = "Placed"
-          // await orderdata.save()
-            // const latestorder = orderdata.order.sort((a, b) => b.order_date - a.order_date)[0];  
-           
-            // latestorder.status =  "Placed"     
-             
-            // await latestorder.save()
-            res.json({status: true })
-             
+          const orderdata = await User.findOne({ email: req.session.userid });
+          console.log("gdgkjdgfgfhdfhksdfghkgdhjdgsfh");
+          console.log(orderdata);
+
+          const latestorder = orderdata.order.sort(
+            (a, b) => b.order_date - a.order_date
+          )[0];
+          
+          console.log(latestorder);
+          console.log("adssdfdfsddsssdfdsffdsfdsfdddh");
+
+          const updatedOrder = await User.updateOne(
+            {
+              email: req.session.userid,
+              "order.order_id": latestorder.order_id,
+            },
+            { $set: { "order.$.status": "Placed" } }
+          );
+
+          console.log(updatedOrder);
+
+          res.json({ status: true });
+
+
 
         } else {
-            console.log("payment failed");
+
+
+
+          console.log("payment failed");
+
+          const orderdata = await User.findOne({ email: req.session.userid })
+            
+
+          const latestorder = orderdata.order.sort(
+            (a, b) => b.order_date - a.order_date
+          )[0];
+          const updatedOrder = await User.updateOne(
+            {
+              email: req.session.userid,
+              "order.order_id": latestorder.order_id,
+            },
+            { $set: { "order.$.status": "Placed" } }
+          );
 
           //   const orderdata = await User.findOne({ email: req.session.userid }, { order: { $slice: -1 } }).sort({ "order.order_date": -1 })
           //   .populate("order.product.product")
           //   .lean();
 
-          //  console.log(orderdata);
+          console.log(orderdata);
           //  orderdata.order[0].status = "Payment Failed"
           // await orderdata.save();
-           
-            res.json({ status: false })
+
+          res.json({ status: false });
         }
       }
     } catch (error) {
-        next(error)
+      next(error);
     }
-},
-
-
-
-
-
+  },
 
   //USER PROFILE ORDER HISTORY
 
@@ -1030,8 +1057,6 @@ module.exports = {
       next(error);
     }
   },
-
-
 
   orderdetails: async (req, res, next) => {
     try {

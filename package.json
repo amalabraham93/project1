@@ -33,5 +33,18 @@
     "razorpay": "^2.8.6",
     "sweetalert2": "^11.4.8",
     "uuid": "^9.0.0"
-  }
+  },
+  "main": "app.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amalabraham93/project1.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/amalabraham93/project1/issues"
+  },
+  "homepage": "https://github.com/amalabraham93/project1#readme",
+  "description": ""
 }
