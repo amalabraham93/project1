@@ -72,7 +72,7 @@
 
 <!--================Cart Area =================-->
 <section class="cart_area">
-    <div class="container">
+    <div id="table" class="container">
          {{#if empty}}
          <div class="card-body cart">
 								<div class="col-sm-12 empty-cart-cls text-center">
@@ -86,7 +86,7 @@
 						</div>
          {{else}}
         <div class="cart_inner">
-            <div class="table-responsive">
+            <div  class="table-responsive">
                 <table class="table">
                     <thead>
                         <tr>
@@ -152,13 +152,13 @@
                                     id="total1{{this.productid._id}}" value="{{total this.quantity this.productid.Price}}">
                             </td>
                             <td><a class="remove" style="color:rgb(248, 5, 5)"
-                                    href="/remove_from_cart/{{this.productid._id}}">
+                                    onclick="removecart('{{this.productid._id}}')">
                                     <fa class="fa fa-close"></fa>
                                 </a></td>
                         </tr>
                         {{/each}}
 
-                        <tr class="bottom_button">
+                        {{!-- <tr class="bottom_button">
                             <td>
                                 <a class="gray_btn" href="#">Update Cart</a>
                             </td>
@@ -175,7 +175,7 @@
                                     <a class="gray_btn" href="#">Close Coupon</a>
                                 </div>
                             </td>
-                        </tr>
+                        </tr> --}}
                         <tr>
                             <td>
 
@@ -326,137 +326,22 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-{{!-- <script>
-    $(document).ready(function (event) {
-         function inc() {
-            event.preventDefault();
-            let price = $('#price').val()
-            let currentQty = parseInt($(this).siblings('.qty').val());
-            let newQty = currentQty + 1;
-           
-            let url = $(this).parent().siblings('.remove').attr('href');
-            $.ajax({
-
-                url: url,
-                method: 'GET',
-                success: function (response) {
-                     console.log(response)
-                    $('input[name="qty"]').val(newQty);
-                   //  {{!-- $('#total1').val( newQty * price);
-                     // $('#sst').val( newQty * price);  --}}
-
-                    }
-             },
-                
-                error: function (xhr, status, error) {
-                    console.log(error);
-                }
-        );
-        });
-
-        $('.reduced').on('click', function ( event) {
-            event.preventDefault();
-            console.log('hdajkdhfka')
-            var currentQty = parseInt($(this).siblings('.qty').val());
-            if (currentQty > 1) {
-                var newQty = currentQty - 1;
-                var url = $(this).parent().siblings('.remove').attr('href');
-                $.ajax({
-                    url: url,
-                    method: 'GET',
-                    success: function (data) {
-                        $('input[name="qty"]').eq(data.index).val(newQty);
-                    },
-                    error: function (xhr, status, error) {
-                        console.log(error);
-                    }
-                });
-            }
-        });
-    });
-</script> --}}
-
-
-
-
-
-
-{{!-- <script>
-    
-    function incqty(id) {
-            {{!-- let price = $('#price'+index).text() --}}
-            let currentQty = parseInt($('#'+id).val());
-            let newQty = currentQty + 1;
-           //  let subtotal = parseInt($('#totalbill').val())
-         //  let alltotal +=    
-
-        $.ajax({
-            url: '/incqty/' + id,
+<script>
+    //remove from cart
+       function removecart(id) {  
+         $.ajax({
+            url: '/remove_from_cart/' + id,
             type: 'GET',
             success: function (response) {
-                 $('#'+id).val(newQty);
-                 //   $('#total1'+index).text( newQty * price);
-                    // $('#sst'+index).text( '$'+newQty * price); 
-                    //  $('#billtotal').text( alltotal );
+                $('#table').load('/cart #table')
             }
         });
     }
-
-    function decqty(id) {
-          //  let price = $('#price'+index).text()
-            let currentQty = parseInt($('#'+id).val());
-            let newQty = currentQty - 1;
-            {{!-- let subtotal = parseInt($('#totalbill').val()) --}}
-        //  let alltotal += (subtotal)
-        $.ajax({
-            url: '/decqty/' + id,
-            type: 'GET',
-            success: function (response) {
-                     [$('#'+id).val(newQty);
-                    // $('#total1'+index).val( newQty * price);
-                    // $('#sst'+index).text( '$'+newQty * price); 
-                    // $('#billtotal').text( alltotal );
-            }
-        });
-    }
-</script> --}}
+</script>
 
 
 
 
 
 
-{{!-- <script>
- $(document).pjax('a', '#main-container')
 
-
-
-$(document).on('pjax:end', function() {
-  // update the subtotal
-  var subtotal = calculateTotal(cart1.cart);
-  $('td.subtotal h5').text('$ ' + subtotal);
-  $('td.subtotal input').val(subtotal);
-
-  // update the total for each product
-  $('tbody tr').each(function() {
-    var qty = parseInt($(this).find('input.qty').val());
-    var price = parseFloat($(this).find('td#price h5').text());
-    var total = qty * price;
-    $(this).find('td[name="totalprice"] h5').text('$' + total);
-    $(this).find('td[name="totalprice"] input').val(total);
-  });
-});
-</script> --}}

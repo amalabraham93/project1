@@ -552,6 +552,7 @@ module.exports = {
 
         if (userdata[0].wishlist.includes(id)) {
           console.log("Product already in wishlist");
+          res.json({already:true,message:"Product already in wishlist"})
         } else {
           await User.updateOne(
             {
@@ -563,7 +564,9 @@ module.exports = {
               },
             }
           );
+          res.json({success:true})
         }
+
         // res.render('users/wishlist',{layout:'layout',user:req.session.userid})
       }
     } catch (error) {
@@ -632,12 +635,59 @@ module.exports = {
           }
         );
         console.log(userdata);
-        res.redirect("/wishlist");
+        res.json({success:true})
       }
     } catch (error) {
       next(error);
     }
   },
+
+  wishtocart: async (req, res, next) => {
+    try {
+      if (req.session.userid) {
+        const id = req.params.id;
+        console.log(id);
+
+        userdata = await User.findOne({
+          email: req.session.userid,
+          "cart.productid": id,
+        });
+
+        if (userdata) {
+          console.log("Product already in cart");
+        } else {
+          //addtocart
+          await User.updateOne(
+            {
+              email: req.session.userid,
+            },
+            {
+              $push: {
+                cart: { productid: id },
+              },
+            }
+          );
+     //remove from wishlist
+          const userdata1 = await User.updateOne(
+            {
+              email: req.session.userid,
+            },
+            {
+              $pull: {
+                wishlist: id,
+              },
+            }
+          );
+        }
+
+        res.json({success:true})
+        // res.redirect("/wishlist");
+      }
+    } catch (error) {
+      next(error);
+    }
+  },
+
   // cart management
 
   addtocart: async (req, res, next) => {
@@ -654,6 +704,8 @@ module.exports = {
 
         if (userdata) {
           console.log("Product already in cart");
+          res.json({already:true,message:"Product already in cart"})
+
         } else {
           await User.updateOne(
             {
@@ -666,7 +718,8 @@ module.exports = {
             }
           );
         }
-        res.redirect("/product_list");
+        // res.redirect("/product_list");
+        res.json({success:true})
       } else {
         res.redirect("/login");
       }
@@ -721,7 +774,8 @@ module.exports = {
           }
         );
         console.log(userdata);
-        res.redirect("/cart");
+        // res.redirect("/cart");
+        res.json({success:true})
       }
     } catch (error) {
       next(error);
@@ -772,9 +826,9 @@ module.exports = {
             { $set: { "cart.$.quantity": 1 } }
           );
         }
-        //  res.json({success:true})
+          res.json({success:true})
 
-        res.redirect("/cart");
+        // res.redirect("/cart");
       }
     } catch (error) {
       next(error);
@@ -983,7 +1037,7 @@ module.exports = {
           const latestorder = orderdata.order.sort(
             (a, b) => b.order_date - a.order_date
           )[0];
-          
+
           console.log(latestorder);
           console.log("adssdfdfsddsssdfdsffdsfdsfdddh");
 
@@ -998,17 +1052,10 @@ module.exports = {
           console.log(updatedOrder);
 
           res.json({ status: true });
-
-
-
         } else {
-
-
-
           console.log("payment failed");
 
-          const orderdata = await User.findOne({ email: req.session.userid })
-            
+          const orderdata = await User.findOne({ email: req.session.userid });
 
           const latestorder = orderdata.order.sort(
             (a, b) => b.order_date - a.order_date

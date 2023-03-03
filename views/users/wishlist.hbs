@@ -206,13 +206,12 @@
         </div> --}}
     <div class="container">
      <div class="cart_inner">
-        <div class="table-responsive ">
+        <div  id="table" class="table-responsive ">
                 <table class="table">
                   <thead>
                     <tr>
                       <th scope="col"></th>
-                      <th scope="col"></th>
-                      <th scope="col">Product</th>
+                      <th style="width: 58%;" scope="col">Product</th>
                       <th scope="col">Price</th>
                       <th scope="col">Stock Status</th>
                       <th scope="col"></th>
@@ -221,16 +220,15 @@
                   <tbody>
                     {{#each productsdata}}
                     <tr>
-                      <td><a class="remove" style="color:rgb(248, 5, 5)"  href="/remove_from_wishlist/{{this._id}}">
+                      <td><a class="remove" style="color:rgb(248, 5, 5)" onclick="removewish('{{this._id}}')">
                         <fa class="fa fa-close"></fa>
                         </a></td>
-                      <td ><a href="">
-                        <img src="/productImages/{{this.image.[0]}}" style="width: 20%;" alt="website  image">
-                        </a></td>
-                      <td>{{this.Name}}</td>
+                      
+                      <td style="width: 58%;"> <img src="/productImages/{{this.image.[0]}}" style="width: 30%; padding-right: 10%;" alt="website  image">
+                      {{this.Name}}</td>
                       <td>{{this.Price}}</td>
                       <td>In Stock</td>
-                      <td><a href="/add" class="primary-btn" >Add To Cart</a></td>
+                      <td><a onclick="addtocart('{{this._id}}')" class="primary-btn" >Add To Cart</a></td>
                     </tr>
                    {{/each}}
                    
@@ -248,5 +246,29 @@
 
 
 
+<script>
+    //remove from wishlist
+       function removewish(id) {  
+         $.ajax({
+            url: '/remove_from_wishlist/' + id,
+            type: 'GET',
+            success: function (response) {
+                $('#table').load('/wishlist #table')
+            }
+        });
+    }
+</script>
+<script>
+    //add to cart
+       function addtocart(id) {  
+         $.ajax({
+            url: '/wishtocart/' + id,
+            type: 'GET',
+            success: function (response) {
+                $('#table').load('/wishlist #table')
+            }
+        });
+    }
+</script>
 
     

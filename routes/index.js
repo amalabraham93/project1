@@ -117,6 +117,8 @@ router.get('/wishlist',userauth.userlogin,userController.loadwishlist)
 
 router.get('/remove_from_wishlist/:id',userauth.userlogin,userController.removewishlist)
 
+router.get('/wishtocart/:id',userauth.userlogin,userController.wishtocart)
+
 
 
 
