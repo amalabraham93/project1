@@ -31,14 +31,14 @@ $(document).ready(function(){
     });
 
     // Search Toggle
-    $("#search_input_box").hide();
-    $("#search").on("click", function () {
-        $("#search_input_box").slideToggle();
-        $("#search_input").focus();
-    });
-    $("#close_search").on("click", function () {
-        $('#search_input_box').slideUp(500);
-    });
+    // $("#search_input_box").hide();
+    // $("#search").on("click", function () {
+    //     $("#search_input_box").slideToggle();
+    //     $("#search_input").focus();
+    // });
+    // $("#close_search").on("click", function () {
+    //     $('#search_input_box').slideUp(500);
+    // });
 
     /*==========================
 		javaScript for sticky header
@@ -54,7 +54,7 @@ $(document).ready(function(){
         autoplayTimeout: 5000,
         loop:true,
         nav:true,
-        navText:["<img src='img/banner/prev.png'>","<img src='img/banner/next.png'>"],
+        navText:["<img src='projecct_asset/img/banner/prev.png'>","<img src='projecct_asset/img/banner/next.png'>"],
         dots:false
     });
 
@@ -67,7 +67,7 @@ $(document).ready(function(){
         autoplayTimeout: 5000,
         loop:true,
         nav:true,
-        navText:["<img src='img/product/prev.png'>","<img src='img/product/next.png'>"],
+        navText:["<img src='projecct_asset/img/product/prev.png'>","<img src='projecct_asset/img/product/next.png'>"],
         dots:false
     });
 
@@ -92,7 +92,7 @@ $(document).ready(function(){
         autoplayTimeout: 5000,
         loop:true,
         nav:true,
-        navText:["<img src='img/product/prev.png'>","<img src='img/product/next.png'>"],
+        navText:["<img src='projecct_asset/img/product/prev.png'>","<img src='projecct_asset/img/product/next.png'>"],
         dots:false
     });
 

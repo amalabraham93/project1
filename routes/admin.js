@@ -95,7 +95,7 @@ admin_router.get(
 
 admin_router.post(
   "/add_product",
-  upload.array("productImage", 3),
+  upload.array("productImage", 20),
   adminController.productAdder
 );
 
@@ -107,7 +107,7 @@ admin_router.get(
 
 admin_router.post(
   "/edited_product/:id",
-  upload.array("productImage", 3),
+  upload.array("productImage", 20),
   adminController.productEditor
 );
 
@@ -117,17 +117,33 @@ admin_router.post("/undoDelete-product/:id", adminController.unhideProduct);
 
 //coupon management
 
-admin_router.get("/coupon_list",admin_auth.adminlogin, adminController.couponlist);
+admin_router.get(
+  "/coupon_list",
+  admin_auth.adminlogin,
+  adminController.couponlist
+);
 
-admin_router.get("/add_coupons",admin_auth.adminlogin ,(req, res) => {
+admin_router.get("/add_coupons", admin_auth.adminlogin, (req, res) => {
   res.render("admin/add_coupons", { layout: "admin_layout" });
 });
 
-admin_router.post('/add_newcoupon',admin_auth.adminlogin,adminController.addcoupon)
+admin_router.post(
+  "/add_newcoupon",
+  admin_auth.adminlogin,
+  adminController.addcoupon
+);
 
-admin_router.get("/edit_coupons/:id",admin_auth.adminlogin, adminController.editcoupon);
+admin_router.get(
+  "/edit_coupons/:id",
+  admin_auth.adminlogin,
+  adminController.editcoupon
+);
 
-admin_router.get("/edited_coupon/:id",admin_auth.adminlogin, adminController.editedcoupon)
+admin_router.get(
+  "/edited_coupon/:id",
+  admin_auth.adminlogin,
+  adminController.editedcoupon
+);
 //order management
 
 admin_router.get(
@@ -145,18 +161,15 @@ admin_router.get(
   adminController.stocklist
 );
 
-// /*404 page*/
-// admin_router.get('/admin/*', (req,res)=>{
-//   res.render('users/404error',{layout:'layout'})
-// })
 
-// router.use(function (req, res, next) {
-//   next(createError(404));
-// });
 
-// router.use(function (err, req, res, next) {
-//   res.status(err.status || 500);
-//   res.render('users/404error',{layout:'layout'});
-// });
+
+//Sales report
+admin_router.get('/sales_reports', adminauth.adminlogin,adminController.salesreport)
+admin_router.post('/sales-report', adminauth.adminlogin,adminController.salesreportgen)
+admin_router.get('/sales-report/pdf',adminauth.adminlogin,adminController.pdfdownlod)
+admin_router.get('/sales-report/excel',adminauth.adminlogin,adminController.exceldonload)
+
+
 
 module.exports = admin_router;

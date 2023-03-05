@@ -1,3 +1,91 @@
+<style>
+  p {
+  margin: 0;
+}
+
+.upload__box {
+  padding: 40px;
+}
+
+.upload__inputfile {
+  width: .1px;
+  height: .1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.upload__btn {
+  display: inline-block;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  min-width: 116px;
+  padding: 5px;
+  transition: all .3s ease;
+  cursor: pointer;
+  border: 2px solid;
+  background-color: #4045ba;
+  border-color: #4045ba;
+  border-radius: 10px;
+  line-height: 26px;
+  font-size: 14px;
+}
+
+.upload__btn:hover {
+  background-color: unset;
+  color: #4045ba;
+  transition: all .3s ease;
+}
+
+.upload__btn-box {
+  margin-bottom: 10px;
+}
+
+.upload__img-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -10px;
+}
+
+.upload__img-box {
+  width: 200px;
+  padding: 0 10px;
+  margin-bottom: 12px;
+}
+
+.upload__img-close {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  text-align: center;
+  line-height: 24px;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.upload__img-close:after {
+  content: '\2716';
+  font-size: 14px;
+  color: white;
+}
+
+.img-bg {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+  padding-bottom: 100%;
+}
+</style>
+
+
+
 
 
 {{>admin_nav}}
@@ -35,21 +123,40 @@
 
           </select>
         </div>
+        {{!-- imageuplod --}}
         <div class="form-group">
           <label for="form-control-file">Image</label><br>
-         
-          <img src="/productImages/{{products.image}}" alt="" style="height:auto;width:50px" id="imgView">
-         
+          <div class="upload__box">
+            <div class="upload__btn-box">
+              <label class="upload__btn">
+                <p>Upload images</p>
+                <input type="file" multiple="" data-max_length="20" name="productImage"  class="upload__inputfile">
+              </label>
+            </div>
+            <div class="upload__img-wrap"></div>
+          </div>
+
+
+        
+
+
+          {{!-- <img src="/productImages/{{products.image}}" alt="" style="height:auto;width:50px" id="imgView">
+
           <input type="file" name="productImage" onchange="viewImage(event)" class="form-control-file mt-2" id="Image"
-            multiple>
-            
-            {{!-- filepond --}}
-          {{!-- <input type="file" class="filepond" name="productImage" name="filepond" multiple data-max-file-size="3MB" data-max-files="3" /> --}}
-       
-               {{!-- <form action="/add_product" method="post" enctype="multipart/form-data" >
-              <input type="file" name="images" class="filepond" multiple>
-              <button type="submit">Upload</button>
-               </form> --}}
+            multiple> --}}
+
+
+
+
+
+          {{!-- filepond --}}
+          {{!-- <input type="file" class="filepond" name="productImage" name="filepond" multiple
+            data-max-file-size="3MB" data-max-files="3" /> --}}
+
+          {{!-- <form action="/add_product" method="post" enctype="multipart/form-data">
+            <input type="file" name="images" class="filepond" multiple>
+            <button type="submit">Upload</button>
+          </form> --}}
 
         </div>
         <div class="form-group col-5">
@@ -63,8 +170,8 @@
             required=""></textarea>
         </div>
 
-        <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
-        <button class="btn btn-light">Cancel</button>
+        <button type="submit" class="btn btn-primary me-2">Submit</button>
+        
       </form>
     </div>
   </div>
@@ -77,83 +184,79 @@
 
 
 
-
-
-
-
-
-{{!-- FilePond.registerPlugin(FilePondPluginImagePreview); --}}
-
-
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-  function viewImage(event) {
-    document.getElementById('imgView').src = URL.createObjectURL(event.target.file[0])
+  $(document).ready(function () {
+    ImgUpload();
+  });
+
+  function ImgUpload() {
+    var imgWrap = "";
+    var imgArray = [];
+
+    $('.upload__inputfile').each(function () {
+      $(this).on('change', function (e) {
+        imgWrap = $(this).closest('.upload__box').find('.upload__img-wrap');
+        var maxLength = $(this).attr('data-max_length');
+
+        var files = e.target.files;
+        var filesArr = Array.prototype.slice.call(files);
+        var iterator = 0;
+        filesArr.forEach(function (f, index) {
+
+          if (!f.type.match('image.*')) {
+            return;
+          }
+
+          if (imgArray.length > maxLength) {
+            return false
+          } else {
+            var len = 0;
+            for (var i = 0; i < imgArray.length; i++) {
+              if (imgArray[i] !== undefined) {
+                len++;
+              }
+            }
+            if (len > maxLength) {
+              return false;
+            } else {
+              imgArray.push(f);
+
+              var reader = new FileReader();
+              reader.onload = function (e) {
+                var html = "<div class='upload__img-box'><div style='background-image: url(" + e.target.result + ")' data-number='" + $(".upload__img-close").length + "' data-file='" + f.name + "' class='img-bg'><div class='upload__img-close'></div></div></div>";
+                imgWrap.append(html);
+                iterator++;
+              }
+              reader.readAsDataURL(f);
+            }
+          }
+        });
+      });
+    });
+
+    $('body').on('click', ".upload__img-close", function (e) {
+      var file = $(this).parent().data("file");
+      for (var i = 0; i < imgArray.length; i++) {
+        if (imgArray[i].name === file) {
+          imgArray.splice(i, 1);
+          break;
+        }
+      }
+      $(this).parent().parent().remove();
+    });
   }
 </script>
 
 
 
- <script>
-
-  /*
-We want to preview images, so we need to register the Image Preview plugin
-*/
-FilePond.registerPlugin(
-	
-	// encodes the file as base64 data
-  FilePondPluginFileEncode,
-	
-	// validates the size of the file
-	FilePondPluginFileValidateSize,
-	
-	// corrects mobile image orientation
-	FilePondPluginImageExifOrientation,
-	
-	// previews dropped images
-  FilePondPluginImagePreview
-);
-
-// Select the file input and use create() to turn it into a pond
-FilePond.create(
-	document.querySelector('input')
-);
-</script>
 
 
 
-{{!-- <script>
-    FilePond.registerPlugin(
-      FilePondPluginImagePreview
-    );
 
-    FilePond.setOptions({
-      imagePreviewHeight: 100,
-      imagePreviewWidth: 100
-    });
 
-    const inputElement = document.querySelector('input.filepond');
-    const pond = FilePond.create(inputElement);
-  </script> --}}
-  {{!-- <script>
-    FilePond.registerPlugin(
-      FilePondPluginImagePreview,
-      FilePondPluginImageResize,
-      FilePondPluginFileEncode
-    );
 
-    FilePond.setOptions({
-      server: {
-        url: '/add_product',
-        process: (fieldName, file, metadata, load, error, progress, abort) => {
-          const formData = new FormData();
-          formData.append(fieldName, file, file.name);
-          const xhr = new XMLHttpRequest();
-          xhr.open('POST', '/add_product');
-          xhr.send(formData);
-        }
-      }
-    });
 
-    FilePond.parse(document.body);
-  </script> --}}
+
+
+

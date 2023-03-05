@@ -569,6 +569,7 @@ module.exports = {
 
         // res.render('users/wishlist',{layout:'layout',user:req.session.userid})
       }
+
     } catch (error) {
       next(error);
     }
@@ -782,6 +783,9 @@ module.exports = {
     }
   },
 
+
+
+
   inccartqty: async (req, res, next) => {
     try {
       if (req.session.userid) {
@@ -803,6 +807,9 @@ module.exports = {
       next(error);
     }
   },
+
+
+
 
   deccartqty: async (req, res, next) => {
     try {
@@ -834,6 +841,11 @@ module.exports = {
       next(error);
     }
   },
+
+
+
+
+
   //CHECKOUT
   checkout: async (req, res, next) => {
     try {
@@ -861,6 +873,10 @@ module.exports = {
       next(error);
     }
   },
+
+
+
+
 
   //ORDER CONFIRMATION
   orderplaced: async (req, res, next) => {
@@ -1093,17 +1109,25 @@ module.exports = {
           { email: req.session.userid },
           { order: 1, _id: 0 }
         )
+          .sort({ "order.order_date": -1 }) // change the sorting order to 1 for ascending order
           .populate("order.product.product")
           .lean()
           .exec();
+          
         // res.send(response)
-        // console.log(orderdata);
-        res.render("users/order_history", { layout: "layout", orderdata });
+        console.log(orderdata);
+
+
+      
+        res.render("users/order_history", { layout: "layout", user: req.session.userid, orderdata });
       }
     } catch (error) {
       next(error);
     }
   },
+
+
+
 
   orderdetails: async (req, res, next) => {
     try {

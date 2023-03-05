@@ -215,11 +215,11 @@
 									</div>
 									<div class="prd-bottom">
 
-										<a href="/addtocart/{{this._id}}" class="social-info">
+										<a onclick="addtocart('{{this._id}}')" class="social-info">
 											<span class="ti-bag"></span>
 											<p class="hover-text">add to bag</p>
 										</a>
-										<a href="/wishlistadd/{{this._id}}" class="social-info">
+										<a  onclick="addtowish('{{this._id}}')" class="social-info">
 											<span class="lnr lnr-heart"></span>
 											<p class="hover-text">Wishlist</p>
 										</a>
@@ -547,6 +547,88 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			</div>
 		</div>
 	</div>
+
+
+    
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+	//add to cart
+	function addtocart(id) {
+		$.ajax({
+			url: '/addtocart/' + id,
+			type: 'GET',
+			success: function (response) {
+				if (response.success) {
+					Swal.fire({
+						position: 'top-end',
+						icon: 'success',
+						title: 'Added to cart successfully',
+						showConfirmButton: false,
+						timer: 1500
+					})
+				} else if(response.already){
+					Swal.fire({
+						icon: 'error',
+						title: response.message,
+						showConfirmButton: false,
+						timer: 2000
+					})
+				}else {
+					location.href ='/login'
+				}
+			}
+		});
+	}
+</script>
+
+
+
+<script>
+	//add to wishlist
+	function addtowish(id) {
+		$.ajax({
+			url: '/wishlistadd/' + id,
+			type: 'GET',
+			success: function (response) {
+				if (response.success) {
+					Swal.fire({
+						position: 'top-end',
+						icon: 'success',
+						title: 'Added to Wishlist successfully',
+						showConfirmButton: false,
+						timer: 1500
+					})
+				} else if(response.already){
+					Swal.fire({
+						icon: 'error',
+						title: response.message,
+						showConfirmButton: false,
+						timer: 2000	
+					})
+				}else{
+					location.href ='/login'
+				}
+			}
+		});
+	}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

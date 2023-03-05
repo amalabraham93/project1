@@ -73,11 +73,11 @@ router.get('/delete_address/:id',userauth.userlogin,userController.deleteaddress
 
 //products
 
- router.get('/product_list',userauth.userlogin, userController.getAllProducts);
+ router.get('/product_list', userController.getAllProducts);
 
- router.get('/category/:id',userauth.userlogin, userController.categoryfiltter);
+ router.get('/category/:id', userController.categoryfiltter);
 
-router.get('/product_details/:id',userauth.userlogin, userController.singleProduct);
+router.get('/product_details/:id', userController.singleProduct);
 
 
 //cart management

@@ -8,6 +8,11 @@ const Coupon = require('../model/coupon_schema')
 const app = require("../app");
 const category = require("../model/category_schema");
 const product = require("../model/products_schema");
+ const PDFDocument = require('pdfkit');
+const fs = require('fs');
+const Excel = require('exceljs');
+ const moment = require("moment");
+// const pdfMake = require("pdfmake");
 let session;
 
 module.exports = {
@@ -644,6 +649,129 @@ unblockEmployee: async (req, res) => {
       res.status(500).send('Server error');
     }
   },
+
+
+
+  salesreport: async (req, res, next) => {
+    try {
+     
+      res.render("admin/sales_report", { layout: "admin_layout" ,admin:req.session.adminid});
+    } catch (error) {
+      next(error);
+    }
+  },
+   
+
+  salesreportgen: async (req, res, next) => {
+    try {
+      console.log(req.body);
+ const startDate = new Date(req.body['start-date']);
+  const endDate = new Date(req.body['end-date']);
+  console.log(startDate,endDate)
+
+  const orders = await User.aggregate([
+    { $match: { "order.order_date": { $gte: startDate, $lte: endDate } } },
+    { $unwind: "$order" },
+    { $match: { "order.order_date": { $gte: startDate, $lte: endDate } } },
+    { $project: { name: 1, order: 1, _id: 0 } },
+    { $lookup: { from: "products", localField: "order.product.product", foreignField: "_id", as: "order.product.product" } },
+    { $unwind: "$order.product.product" },
+    { $group: { _id: "$name", orders: { $push: "$order" } } }
+  ]);
+     console.log(orders)
+      res.render("admin/sales_report", { layout: "admin_layout" ,orders,startDate,endDate, admin:req.session.adminid});
+    } catch (error) {
+      next(error);
+    }
+  },
+
+
+
+  
+  pdfdownlod: async (req, res, next) => {
+    try {
+       const startDate1 = new Date(req.body['start-date']);
+       const endDate1 = new Date(req.body['end-date']);
+      const startDate = req.body['start-date'];
+      const endDate = req.body['end-date'];
+      const orders = await User.find(
+        { order: { $elemMatch: { order_date: { $gte: startDate, $lte: endDate } } } },
+        { name: 1, order: 1, _id: 0 }
+      )
+        .populate("order.product.product")
+        .lean();
+  
+      // Create a new PDF document
+      const doc = new PDFDocument();
+  
+      // Set the PDF document headers and filename
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="sales-report.pdf"`);
+  
+      // Pipe the PDF document to the response stream
+      doc.pipe(res);
+  
+      // Add the sales report data to the PDF document
+      doc.fontSize(18).text(`Sales Report: ${startDate} - ${endDate}`, { align: 'center' });
+      doc.moveDown();
+      doc.fontSize(12);
+      for (const order of orders) {
+        doc.text(`Order ID: ${order.order_id}`);
+        doc.text(`Date: ${order.order_date}`);
+        doc.text(`Customer Name: ${order.name}`);
+        doc.text(`Product Name: ${order.order[0].product.product.Name}`);
+        doc.text(`Price: ${order.order[0].product.product.Price}`);
+        doc.moveDown();
+      }
+  
+      // End the PDF document stream
+      doc.end();
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  },
+
+  exceldonload: async (req, res, next) => {
+    try {
+      const startDate = new Date(req.body['start-date']);
+      const endDate = new Date(req.body['end-date']);
+    
+      const orders = await User.find(
+        { order: { $elemMatch: { order_date: { $gte: startDate, $lte: endDate } } } },
+        { name: 1, order: 1, _id: 0 }
+      ).populate("order.product.product").lean();
+  
+      // Create a new Excel workbook
+      const workbook = new Excel.Workbook();
+    
+      // Add a new worksheet to the workbook
+      const worksheet = workbook.addWorksheet('Sales Report');
+    
+      // Add headers to the worksheet
+      worksheet.addRow(['Order ID', 'Date', 'Customer Name', 'Product Name', 'Price']);
+    
+      // Add data to the worksheet
+      for (const order of orders) {
+        worksheet.addRow([order.order.order_id, order._id, order.name, order.products[0].name, order.products[0].price]);
+      }
+    
+      // Set the response headers and filename
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', `attachment; filename="sales-report.xlsx"`);
+    
+      // Write the workbook to the response stream
+      await workbook.xlsx.write(res);
+    
+      // End the response stream
+      res.end();
+    } catch (error) {
+      next(error);
+    }
+  },
+
+
+
 
 
 

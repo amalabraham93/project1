@@ -6,14 +6,6 @@
 
 
 
-
-
-
-
-
-
-
-
 <script src="https://kit.fontawesome.com/e87da92f1d.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://kit.fontawesome.com/e87da92f1d.css" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
@@ -42,54 +34,12 @@
     integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
     crossorigin="anonymous"></script>
 
-<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
-  <script src="https://unpkg.com/filepond-plugin-image-transform/dist/filepond-plugin-image-transform.min.js"></script>
-  
 
 
 
 
-<script>
- function viewImage(event){
-    document.getElementById('imgView').src=URL.createObjectURL(event.target.files[0])
-  }
-</script>
 
-<script>
-    FilePond.registerPlugin(
-      FilePondPluginImagePreview
-    );
 
-    FilePond.setOptions({
-      imagePreviewHeight: 100,
-      imagePreviewWidth: 100
-    });
-
-    const inputElement = document.querySelector('input.filepond');
-    const pond = FilePond.create(inputElement);
-  </script>
-  {{!-- <script>
-    FilePond.registerPlugin(
-      FilePondPluginImagePreview,
-      FilePondPluginImageResize,
-      FilePondPluginFileEncode
-    );
-
-    FilePond.setOptions({
-      server: {
-        url: '/add_product',
-        process: (fieldName, file, metadata, load, error, progress, abort) => {
-          const formData = new FormData();
-          formData.append(fieldName, file, file.name);
-          const xhr = new XMLHttpRequest();
-          xhr.open('POST', '/add_product');
-          xhr.send(formData);
-        }
-      }
-    });
-
-    FilePond.parse(document.body);
-  </script> --}}
 
    
 </body>

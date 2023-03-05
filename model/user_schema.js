@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 const { v4: uuidv4 } = require('uuid');
 // generate a UUID string
-const uuid = uuidv4();
+// const uuid = uuidv4();
 
-// create a custom ID by appending a prefix to the UUID string
-const customId = `order_${uuid}`;
+// // create a custom ID by appending a prefix to the UUID string
+// const customId = `order_${uuid}`;
 
 
 const schemauser = new mongoose.Schema(
@@ -69,7 +69,6 @@ const schemauser = new mongoose.Schema(
       {
         order_id: {
           type: String,
-          default: customId,
           unique: true
         },
         product:[{
@@ -100,6 +99,15 @@ const schemauser = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+
+// define a pre-save hook to generate a customId for each order
+schemauser.path('order').schema.pre('save', function(next) {
+  const uuid = uuidv4();
+  const customId = `order_${uuid}`;
+  this.order_id = customId;
+  next();
+});
 
 const user = mongoose.model("user", schemauser);
 
