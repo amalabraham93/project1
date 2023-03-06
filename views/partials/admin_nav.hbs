@@ -1,3 +1,21 @@
+<style>
+    /* style for active menu item */
+.nav-item.active > .nav-link {
+  background-color: #007bff;
+  color: #fff;
+}
+
+/* style for hover effect */
+.nav-item:hover > .nav-link {
+  background-color: #f8f9fa;
+  color: #000;
+}
+</style>
+
+
+
+
+
 <nav class="navbar navbar-dark" style="background-color: rgb(0, 0, 0);">
     <div class="container-fluid" id="login">
         <h1><a class="navbar-brand" style="color: #fff;">WELCOME</a></h1>
@@ -41,112 +59,116 @@
 
                     {{!-- users --}}
                     <liclass="nav-item ">
-                        <a href="/admin/userslist" class="nav-link align-middle px-0" style=" color:#fff">
-                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">USERS LIST</span>
+                        <a href=" /admin/userslist" class="nav-link align-middle px-0" style=" color:#fff">
+                        <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">USERS LIST</span>
                         </a>
-                    </li>
+                        </li>
 
 
 
-                    {{!-- employees --}}
-                    {{log admin.super_admin}}
-                    {{#if admin.super_admin}}
-                    <li class="nav-item ">
-                        <a href="#submenu0" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
-                            style="color:#fff">
-                            <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">EMPLOYEES</span>
-                        </a>
-                        <ul class="collapse  nav flex-column ms-1" id="submenu0" data-bs-parent="#menu">
-                            <li class="nav-item activ">
-                                <a href="/admin/employee_list" class="nav-link px-0" style="color:#fff"> <span
-                                        class="d-none d-sm-inline">EMPLOYEES LIST</span>
-                                </a>
-                            </li>
-                            <li class="nav-item ">
-                                <a href="/admin/add_employee" class="nav-link px-0" style=" color:#fff"> <span
-                                        class="d-none d-sm-inline">ADD EMPLOYEE</span> </a>
-                            </li>
-                        </ul>
-                    </li>
+                        {{!-- employees --}}
+                        {{log admin.super_admin}}
+                        {{#if admin.super_admin}}
+                        <li class="nav-item ">
+                            <a href="#submenu0" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
+                                style="color:#fff">
+                                <i class="fs-4 bi-speedometer2"></i> <span
+                                    class="ms-1 d-none d-sm-inline">EMPLOYEES</span>
+                            </a>
+                            <ul class="collapse  nav flex-column ms-1" id="submenu0" data-bs-parent="#menu">
+                                <li class="nav-item activ">
+                                    <a href="/admin/employee_list" class="nav-link px-0" style="color:#fff"> <span
+                                            class="d-none d-sm-inline">EMPLOYEES LIST</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item ">
+                                    <a href="/admin/add_employee" class="nav-link px-0" style=" color:#fff"> <span
+                                            class="d-none d-sm-inline">ADD EMPLOYEE</span> </a>
+                                </li>
+                            </ul>
+                        </li>
 
-                    {{/if}}
+                        {{/if}}
 
 
-                    {{!-- categories --}}
-                    <li class="nav-item " >
-                        <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
-                            style="color:#fff">
-                            <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">CATEGORIES</span>
-                        </a>
-                        <ul class="collapse  nav flex-column ms-1" id="submenu1" data-bs-parent="#menu"
-                            aria-expanded="false">
-                            <li class="nav-item ">
-                                <a href="/admin/category" class="nav-link px-0" style="color:#fff"> <span
-                                        class="d-none d-sm-inline">CATEGORY LIST</span>
-                                </a>
-                            </li>
-                            <li class="nav-item ">
-                                <a href="/admin/addcategory" class="nav-link px-0" style=" color:#fff"> <span
-                                        class="d-none d-sm-inline">ADD CATEGORY</span> </a>
-                            </li>
-                        </ul>
-                    </li>
+                        {{!-- categories --}}
+                        <li class="nav-item ">
+                            <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
+                                style="color:#fff">
+                                <i class="fs-4 bi-speedometer2"></i> <span
+                                    class="ms-1 d-none d-sm-inline">CATEGORIES</span>
+                            </a>
+                            <ul class="collapse  nav flex-column ms-1" id="submenu1" data-bs-parent="#menu"
+                                aria-expanded="false">
+                                <li class="nav-item ">
+                                    <a href="/admin/category" class="nav-link px-0" style="color:#fff"> <span
+                                            class="d-none d-sm-inline">CATEGORY LIST</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item ">
+                                    <a href="/admin/addcategory" class="nav-link px-0" style=" color:#fff"> <span
+                                            class="d-none d-sm-inline">ADD CATEGORY</span> </a>
+                                </li>
+                            </ul>
+                        </li>
 
-                    {{!-- Product List --}}
-                    <li class="nav-item ">
-                        <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
-                            style=" color:#fff">
-                            <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">PRODUCTS</span>
-                        </a>
-                        <ul class="collapse  nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
-                            <li class="nav-item ">
-                                <a href="/admin/productlist" class="nav-link px-0" style=" color:#fff"> <span
-                                        class="d-none d-sm-inline">PRODUCT LIST</span>
-                                </a>
-                            </li>
-                            <li class="nav-item ">
-                                <a href="/admin/add_product" class="nav-link px-0" style=" color:#fff"> <span
-                                        class="d-none d-sm-inline">ADD PRODUCT</span> </a>
-                            </li>
-                        </ul>
-                    </li>
+                        {{!-- Product List --}}
+                        <li class="nav-item ">
+                            <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
+                                style=" color:#fff">
+                                <i class="fs-4 bi-speedometer2"></i> <span
+                                    class="ms-1 d-none d-sm-inline">PRODUCTS</span>
+                            </a>
+                            <ul class="collapse  nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
+                                <li class="nav-item ">
+                                    <a href="/admin/productlist" class="nav-link px-0" style=" color:#fff"> <span
+                                            class="d-none d-sm-inline">PRODUCT LIST</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item ">
+                                    <a href="/admin/add_product" class="nav-link px-0" style=" color:#fff"> <span
+                                            class="d-none d-sm-inline">ADD PRODUCT</span> </a>
+                                </li>
+                            </ul>
+                        </li>
 
-                    {{!-- ORDER --}}
-                    <li class="nav-item ">
-                        <a href="/admin/order_list" class="nav-link align-middle px-0" style=" color:#fff">
-                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">ORDERS</span>
-                        </a>
-                    </li>
-                    {{!-- STOCK --}}
-                    <li class="nav-item ">
-                        <a href="/admin/stock_list" class="nav-link align-middle px-0" style=" color:#fff">
-                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">STOCK LIST</span>
-                        </a>
-                    </li>
-                     {{!-- sales report --}}
-                    <li class="nav-item ">
-                        <a href="/admin/sales_reports" class="nav-link align-middle px-0" style=" color:#fff">
-                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">SALES REPORT</span>
-                        </a>
-                    </li>
-                    {{!-- COUPONS --}}
-                    <li class="nav-item active">
-                        <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
-                            style=" color:#fff">
-                            <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">COUPONS</span>
-                        </a>
-                        <ul class="collapse  nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
-                            <li class="nav-item active">
-                                <a href="/admin/coupon_list" class="nav-link px-0" style=" color:#fff"> <span
-                                        class="d-none d-sm-inline">COUPON LIST</span>
-                                </a>
-                            </li>
-                            <li class="nav-item active">
-                                <a href="/admin/add_coupons" class="nav-link px-0" style=" color:#fff"> <span
-                                        class="d-none d-sm-inline">ADD COUPON</span> </a>
-                            </li>
-                        </ul>
-                    </li>
+                        {{!-- ORDER --}}
+                        <li class="nav-item ">
+                            <a href="/admin/order_list" class="nav-link align-middle px-0" style=" color:#fff">
+                                <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">ORDERS</span>
+                            </a>
+                        </li>
+                        {{!-- STOCK --}}
+                        <li class="nav-item ">
+                            <a href="/admin/stock_list" class="nav-link align-middle px-0" style=" color:#fff">
+                                <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">STOCK LIST</span>
+                            </a>
+                        </li>
+                        {{!-- sales report --}}
+                        <li class="nav-item ">
+                            <a href="/admin/sales_reports" class="nav-link align-middle px-0" style=" color:#fff">
+                                <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">SALES REPORT</span>
+                            </a>
+                        </li>
+                        {{!-- COUPONS --}}
+                        <li class="nav-item ">
+                            <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
+                                style=" color:#fff">
+                                <i class="fs-4 bi-speedometer2"></i> <span
+                                    class="ms-1 d-none d-sm-inline">COUPONS</span>
+                            </a>
+                            <ul class="collapse  nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+                                <li class="nav-item ">
+                                    <a href="/admin/coupon_list" class="nav-link px-0" style=" color:#fff"> <span
+                                            class="d-none d-sm-inline">COUPON LIST</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item ">
+                                    <a href="/admin/add_coupons" class="nav-link px-0" style=" color:#fff"> <span
+                                            class="d-none d-sm-inline">ADD COUPON</span> </a>
+                                </li>
+                            </ul>
+                        </li>
                 </ul>
                 <hr>
                 {{!-- <div class="dropdown pb-4">
@@ -173,3 +195,14 @@
         <div class="col py-3">
             <div class="container">
                 <div class="row">
+
+
+
+
+
+
+
+                    <script>
+                        document.querySelector('.nav-item.active').classList.remove('active');
+                        event.target.closest('.nav-item').classList.add('active');
+                    </script>

@@ -10,7 +10,7 @@
   <label for="end-date">End Date</label>
   <input type="date" id="end-date" name="end-date">
 
-  <button type="submit">Generate Report</button>
+  <button class="btn btn-primary" type="submit">Generate Report</button>
 </form>
 
 
@@ -25,28 +25,25 @@
       <tr>
         <th>Order ID</th>
         <th>Date</th>
-        <th>Customer Name</th>
-        <th>Product Name</th>
-        <th>Price</th>
+        <th>Bill Total</th>
+        <th>customer Name</th>
+        <th>Status</th>
       </tr>
     </thead>
+   
     <tbody>
       {{#each orders}}
-           {{#each order}}
-
-      
         <tr>
-          <td>{{this.order_id}}</td>
-          <td>{{formatDate this.order_date}}</td>
-          <td>{{../name}}</td>
-          <td>{{this.product.product.[0].Name}}</td>
-          <td>{{this.product.product.[0].Price}}</td>
+          <td>{{_id}}</td>
+          <td>{{formatDate order_date}}</td>
+          <td>{{ bill_amount}}</td>
+          <td>{{user_name}}</td>
+          <td>{{status}}</td>
         </tr>
-          {{/each}}
-      {{/each}}
+        {{/each}}
     </tbody>
+ 
   </table>
-  {{startDate}}
   <br>
     <a href="/admin/sales-report/excel?startDate={{startDate}}&endDate={{endDate}}">Download Excel</a>
     <a href="/admin/sales-report/pdf?startDate={{startDate}}&endDate={{endDate}}">Download PDF</a>

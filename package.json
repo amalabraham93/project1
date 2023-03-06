@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
+    "chart.js": "^4.2.1",
     "connect-flash": "^0.1.1",
     "cookie-parser": "~1.4.4",
     "crypto": "^1.0.1",
@@ -32,6 +33,7 @@
     "nodemon": "^2.0.20",
     "otp-generator": "^4.0.1",
     "pdfkit": "^0.13.0",
+    "pdfkit-table": "^0.1.99",
     "pdfmake": "^0.2.7",
     "pjax": "^0.2.8",
     "razorpay": "^2.8.6",

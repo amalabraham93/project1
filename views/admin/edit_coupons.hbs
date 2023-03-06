@@ -63,23 +63,22 @@
       <p class="card-description  mt-5 mb-5">
       <h2>EDIT COUPONS</h2>
       </p>
-      {{#each coupon}}
-      <form action="/admin/edited_coupon/{{this._id}}"  method="post" class="forms-sample mt-5">
+      <form action="/admin/edited_coupon/{{coupon._id}}"  method="post" class="forms-sample mt-5">
         <div class="form-group">
           <label for="code">Coupon Code:</label>
-          <input type="text" class="form-control" id="code" name="code" value="{{code}}">
+          <input type="text" class="form-control" id="code" name="code" value="{{coupon.code}}">
         </div>
         <div class="form-group">
           <label for="type">Percent off:</label>
-          <input type="number" class="form-control" id="percentOff" name="percentOff" min="0" max="100"  value="{{percentOff}}" required>
+          <input type="number" class="form-control" id="percentOff" name="percentOff" min="0" max="100"  value="{{coupon.percentOff}}" required>
         </div>
         <div class="form-group">
           <label for="maxDiscount">Max discount:</label>
-          <input type="number" class="form-control" id="maxDiscount" name="maxDiscount" min="0"  value="{{maxDiscount}}" required>
+          <input type="number" class="form-control" id="maxDiscount" name="maxDiscount" min="0"  value="{{coupon.maxDiscount}}" required>
         </div>
         <div class="form-group">
           <label for="startDate">Start date:</label>
-          <input type="date" class="form-control" id="startDate" name="startDate" value="" required>
+          <input type="date" class="form-control" id="startDate" name="startDate" value="{{couponDate coupon.startDate}}" required>
         </div>
         <div class="form-group">
           <label for="expirationDate">Expiration date:</label>
@@ -87,14 +86,13 @@
         </div>
         <div class="form-group">
           <label for="status">Status:</label>
-          <select id="status" name="status" class="form-control"  value="{{status}}">
+          <select id="status" name="status" class="form-control"  value="{{coupon.status}}">
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
           </select>
         </div>
         <button type="submit" class="btn btn-primary">Save</button>
       </form>
-     {{/each}}
     </div>
   </div>
 </div>
@@ -105,7 +103,7 @@
 
 
 
-<script>
+{{!-- <script>
   // Get the modal
   var modal = document.getElementById("editCouponForm");
 
@@ -113,4 +111,4 @@
   var btn = document.getElementById("editCouponBtn");
 
 // Get the <span> element that closes the modal
-</script>
+</script> --}}

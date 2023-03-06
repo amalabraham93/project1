@@ -9,6 +9,7 @@ const app = require("../app");
 const category = require("../model/category_schema");
 const product = require("../model/products_schema");
  const PDFDocument = require('pdfkit');
+ const { table } = require('pdfkit-table');
 const fs = require('fs');
 const Excel = require('exceljs');
  const moment = require("moment");
@@ -31,7 +32,7 @@ module.exports = {
 
        const totalsold = await User.aggregate([
           { $unwind: '$order' }, // flatten the order array
-          { $match: { 'order.status': 'pending' } }, // filter only completed orders
+          { $match: { 'order.status': 'Placed' } }, // filter only completed orders
           { $unwind: '$order.product' }, // flatten the product array
           { $group: { _id: null, totalQuantity: { $sum: '$order.product.quantity' } } } // group by null and sum the quantity
         ]).exec()
@@ -39,7 +40,7 @@ module.exports = {
 
         const profit = await User.aggregate([
           { $unwind: '$order' }, // flatten the order array
-          { $match: { 'order.status': 'pending' } }, // filter only completed orders
+          { $match: { 'order.status': 'Placed' } }, // filter only completed orders
           { $group: { _id: null, totalProfit: { $sum: '$order.bill_amount' } } } // group by null and sum the bill_amount
         ]).exec()
         const totalusers = await User.countDocuments({}).lean()
@@ -601,15 +602,16 @@ unblockEmployee: async (req, res) => {
   editcoupon: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const updatedCoupon = req.body;
+      // const updatedCoupon = req.body;
   
-      const coupon = await Coupon.findone({_id:id});
+      const coupon = await Coupon.findOne({_id:id}).lean();
+      console.log(coupon);
   
       if (!coupon) {
         // return res.status(404).json({ message: 'Coupon not found' });
 
       }
-      res.rednder('admin/edit_coupon',{ layout: "admin_layout" ,coupon,admin:req.session.adminid});
+      res.render('admin/edit_coupons',{ layout: "admin_layout" ,coupon,admin:req.session.adminid});
       // res.json(coupon);
     } catch (error) {
       next(error);
@@ -620,8 +622,8 @@ unblockEmployee: async (req, res) => {
     try {
       const { id } = req.params;
       const updatedCoupon = req.body;
-  
-      const coupon = await Coupon.findByIdAndUpdate(id, updatedCoupon, { new: true });
+      console.log(updatedCoupon);
+      const coupon = await Coupon.updateOne({_id:id},{$set:updatedCoupon} );
   
       if (!coupon) {
         // return res.status(404).json({ message: 'Coupon not found' });
@@ -670,13 +672,57 @@ unblockEmployee: async (req, res) => {
   console.log(startDate,endDate)
 
   const orders = await User.aggregate([
-    { $match: { "order.order_date": { $gte: startDate, $lte: endDate } } },
-    { $unwind: "$order" },
-    { $match: { "order.order_date": { $gte: startDate, $lte: endDate } } },
-    { $project: { name: 1, order: 1, _id: 0 } },
-    { $lookup: { from: "products", localField: "order.product.product", foreignField: "_id", as: "order.product.product" } },
-    { $unwind: "$order.product.product" },
-    { $group: { _id: "$name", orders: { $push: "$order" } } }
+    // match orders within order date range
+    {
+      $match: {
+        "order.order_date": {
+          $gte: startDate,
+          $lte: endDate
+        }
+      }
+    },
+    // unwind orders array to get individual orders
+    {
+      $unwind: "$order"
+    },
+    // match individual order within order date range again (in case there are multiple orders for the same user)
+    {
+      $match: {
+        "order.order_date": {
+          $gte: startDate,
+          $lte: endDate
+        }
+      }
+    },
+    // join with user collection to get user name for each order
+    {
+      $lookup: {
+        from: "users",
+        localField: "_id",
+        foreignField: "_id",
+        as: "user"
+      }
+    },
+    // unwind user array to get individual user
+    {
+      $unwind: "$user"
+    },
+    // project only the fields needed for the output
+    {
+      $project: {
+        _id: "$order.order_id",
+        order_date: "$order.order_date",
+        user_name: "$user.name",
+        total: "$order.total",
+        delivery_address: "$order.delivery_address",
+        bill_amount: "$order.bill_amount",
+        status: "$order.status",
+        payment_method: "$order.payment_method",
+        payment_id: "$order.payment_id",
+        coupon: "$order.coupon",
+        coupon_discount: "$order.coupon_discount"
+      }
+    }
   ]);
      console.log(orders)
       res.render("admin/sales_report", { layout: "admin_layout" ,orders,startDate,endDate, admin:req.session.adminid});
@@ -690,42 +736,91 @@ unblockEmployee: async (req, res) => {
   
   pdfdownlod: async (req, res, next) => {
     try {
-       const startDate1 = new Date(req.body['start-date']);
-       const endDate1 = new Date(req.body['end-date']);
-      const startDate = req.body['start-date'];
-      const endDate = req.body['end-date'];
-      const orders = await User.find(
-        { order: { $elemMatch: { order_date: { $gte: startDate, $lte: endDate } } } },
-        { name: 1, order: 1, _id: 0 }
-      )
-        .populate("order.product.product")
-        .lean();
+      const startDate =new Date( req.query.startDate);
+      const endDate = new Date(req.query.endDate);
+       const startDate1 = startDate.toLocaleDateString();
+       const endDate1 = endDate.toLocaleDateString();
+       
+      const orders = await User.aggregate([
+        // match orders within order date range
+        {
+          $match: {
+            "order.order_date": {
+              $gte: startDate,
+              $lte: endDate
+            }
+          }
+        },
+        // unwind orders array to get individual orders
+        {
+          $unwind: "$order"
+        },
+        // match individual order within order date range again (in case there are multiple orders for the same user)
+        {
+          $match: {
+            "order.order_date": {
+              $gte: startDate,
+              $lte: endDate
+            }
+          }
+        },
+        // join with user collection to get user name for each order
+        {
+          $lookup: {
+            from: "users",
+            localField: "_id",
+            foreignField: "_id",
+            as: "user"
+          }
+        },
+        // unwind user array to get individual user
+        {
+          $unwind: "$user"
+        },
+        // project only the fields needed for the output
+        {
+          $project: {
+            _id: "$order.order_id",
+            order_date: "$order.order_date",
+            user_name: "$user.name",
+            total: "$order.total",
+            delivery_address: "$order.delivery_address",
+            bill_amount: "$order.bill_amount",
+            status: "$order.status",
+            payment_method: "$order.payment_method",
+            payment_id: "$order.payment_id",
+            coupon: "$order.coupon",
+            coupon_discount: "$order.coupon_discount"
+          }
+        }
+      ]); 
+      console.log(orders);
   
-      // Create a new PDF document
-      const doc = new PDFDocument();
-  
-      // Set the PDF document headers and filename
-      res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', `attachment; filename="sales-report.pdf"`);
-  
-      // Pipe the PDF document to the response stream
-      doc.pipe(res);
-  
-      // Add the sales report data to the PDF document
-      doc.fontSize(18).text(`Sales Report: ${startDate} - ${endDate}`, { align: 'center' });
-      doc.moveDown();
-      doc.fontSize(12);
-      for (const order of orders) {
-        doc.text(`Order ID: ${order.order_id}`);
-        doc.text(`Date: ${order.order_date}`);
-        doc.text(`Customer Name: ${order.name}`);
-        doc.text(`Product Name: ${order.order[0].product.product.Name}`);
-        doc.text(`Price: ${order.order[0].product.product.Price}`);
-        doc.moveDown();
-      }
-  
-      // End the PDF document stream
-      doc.end();
+       // Create a new PDF document
+       const doc = new PDFDocument();
+
+       // Set the PDF document headers and filename
+       res.setHeader('Content-Type', 'application/pdf');
+       res.setHeader('Content-Disposition', `attachment; filename="sales-report.pdf"`);
+   
+       // Pipe the PDF document to the response stream
+       doc.pipe(res);
+   
+       // Add the sales report data to the PDF document
+       doc.fontSize(18).text(`Sales Report: ${startDate1} - ${endDate1}`, { align: 'center' });
+       doc.moveDown();
+       doc.fontSize(12);
+       for (const order of orders) {
+         doc.text(`Order ID: ${order._id}`);
+         doc.text(`Date: ${new Date(order.order_date).toLocaleDateString()}`);
+         doc.text(`Customer Name: ${order.user_name}`);
+         doc.text(`Bill Amount: ${order.bill_amount}`);
+         doc.text(`Status: ${order.status}`);
+         doc.moveDown();
+       }
+   
+       // End the PDF document stream
+       doc.end();
     } catch (err) {
       console.log(err);
       res.status(500).json({ message: "Internal server error" });
@@ -734,14 +829,62 @@ unblockEmployee: async (req, res) => {
 
   exceldonload: async (req, res, next) => {
     try {
-      const startDate = new Date(req.body['start-date']);
-      const endDate = new Date(req.body['end-date']);
+      const startDate =new Date( req.query.startDate);
+      const endDate = new Date(req.query.endDate);
     
-      const orders = await User.find(
-        { order: { $elemMatch: { order_date: { $gte: startDate, $lte: endDate } } } },
-        { name: 1, order: 1, _id: 0 }
-      ).populate("order.product.product").lean();
-  
+      const orders = await User.aggregate([
+        // match orders within order date range
+        {
+          $match: {
+            "order.order_date": {
+              $gte: startDate,
+              $lte: endDate
+            }
+          }
+        },
+        // unwind orders array to get individual orders
+        {
+          $unwind: "$order"
+        },
+        // match individual order within order date range again (in case there are multiple orders for the same user)
+        {
+          $match: {
+            "order.order_date": {
+              $gte: startDate,
+              $lte: endDate
+            }
+          }
+        },
+        // join with user collection to get user name for each order
+        {
+          $lookup: {
+            from: "users",
+            localField: "_id",
+            foreignField: "_id",
+            as: "user"
+          }
+        },
+        // unwind user array to get individual user
+        {
+          $unwind: "$user"
+        },
+        // project only the fields needed for the output
+        {
+          $project: {
+            _id: "$order.order_id",
+            order_date: "$order.order_date",
+            user_name: "$user.name",
+            total: "$order.total",
+            delivery_address: "$order.delivery_address",
+            bill_amount: "$order.bill_amount",
+            status: "$order.status",
+            payment_method: "$order.payment_method",
+            payment_id: "$order.payment_id",
+            coupon: "$order.coupon",
+            coupon_discount: "$order.coupon_discount"
+          }
+        }
+      ]); 
       // Create a new Excel workbook
       const workbook = new Excel.Workbook();
     
@@ -749,11 +892,11 @@ unblockEmployee: async (req, res) => {
       const worksheet = workbook.addWorksheet('Sales Report');
     
       // Add headers to the worksheet
-      worksheet.addRow(['Order ID', 'Date', 'Customer Name', 'Product Name', 'Price']);
+      worksheet.addRow(['Order ID', 'Date', 'Customer Name', 'Bill Amount', 'Price']);
     
       // Add data to the worksheet
       for (const order of orders) {
-        worksheet.addRow([order.order.order_id, order._id, order.name, order.products[0].name, order.products[0].price]);
+        worksheet.addRow([order._id, new Date(order.order_date).toLocaleDateString(), order.user_name, order.bill_amount, order.status]);
       }
     
       // Set the response headers and filename

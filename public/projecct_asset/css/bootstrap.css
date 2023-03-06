@@ -5,7 +5,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 
-:root {
+ :root {
     --blue: #007bff;
     --indigo: #6610f2;
     --purple: #6f42c1;
@@ -4981,7 +4981,7 @@ input[type=submit].btn-block {
     border-bottom-right-radius: .2rem
 }
 
-.badge {
+.badge1 {
     display: inline-block;
     padding: .25em .4em;
     font-size: 75%;
@@ -4993,112 +4993,112 @@ input[type=submit].btn-block {
     border-radius: .25rem
 }
 
-.badge:empty {
+.badge1:empty {
     display: none
 }
 
-.btn .badge {
+.btn .badge1 {
     position: relative;
     top: -1px
 }
 
-.badge-pill {
+.badge1-pill {
     padding-right: .6em;
     padding-left: .6em;
     border-radius: 10rem
 }
 
-.badge-primary {
+.badge1-primary {
     color: #fff;
     background-color: #007bff
 }
 
-.badge-primary[href]:focus,
-.badge-primary[href]:hover {
+.badge1-primary[href]:focus,
+.badge1-primary[href]:hover {
     color: #fff;
     text-decoration: none;
     background-color: #0062cc
 }
 
-.badge-secondary {
+.badge1-secondary {
     color: #fff;
     background-color: #6c757d
 }
 
-.badge-secondary[href]:focus,
-.badge-secondary[href]:hover {
+.badge1-secondary[href]:focus,
+.badge1-secondary[href]:hover {
     color: #fff;
     text-decoration: none;
     background-color: #545b62
 }
 
-.badge-success {
+.badge1-success {
     color: #fff;
     background-color: #28a745
 }
 
-.badge-success[href]:focus,
-.badge-success[href]:hover {
+.badge1-success[href]:focus,
+.badge1-success[href]:hover {
     color: #fff;
     text-decoration: none;
     background-color: #1e7e34
 }
 
-.badge-info {
+.badge1-info {
     color: #fff;
     background-color: #17a2b8
 }
 
-.badge-info[href]:focus,
-.badge-info[href]:hover {
+.badge1-info[href]:focus,
+.badge1-info[href]:hover {
     color: #fff;
     text-decoration: none;
     background-color: #117a8b
 }
 
-.badge-warning {
+.badge1-warning {
     color: #212529;
     background-color: #ffc107
 }
 
-.badge-warning[href]:focus,
-.badge-warning[href]:hover {
+.badge1-warning[href]:focus,
+.badge1-warning[href]:hover {
     color: #212529;
     text-decoration: none;
     background-color: #d39e00
 }
 
-.badge-danger {
+.badge1-danger {
     color: #fff;
     background-color: #dc3545
 }
 
-.badge-danger[href]:focus,
-.badge-danger[href]:hover {
+.badge1-danger[href]:focus,
+.badge1-danger[href]:hover {
     color: #fff;
     text-decoration: none;
     background-color: #bd2130
 }
 
-.badge-light {
+.badge1-light {
     color: #212529;
     background-color: #f8f9fa
 }
 
-.badge-light[href]:focus,
-.badge-light[href]:hover {
+.badge1-light[href]:focus,
+.badge1-light[href]:hover {
     color: #212529;
     text-decoration: none;
     background-color: #dae0e5
 }
 
-.badge-dark {
+.badge1-dark {
     color: #fff;
     background-color: #343a40
 }
 
-.badge-dark[href]:focus,
-.badge-dark[href]:hover {
+.badge1-dark[href]:focus,
+.badge1-dark[href]:hover {
     color: #fff;
     text-decoration: none;
     background-color: #1d2124
@@ -9282,7 +9282,7 @@ a.text-dark:hover {
     .navbar {
         display: none
     }
-    .badge {
+    .badge1 {
         border: 1px solid #000
     }
     .table {

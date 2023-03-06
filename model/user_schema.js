@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { v4: uuidv4 } = require('uuid');
+// const { v4: uuidv4 } = require('uuid');
 // generate a UUID string
 // const uuid = uuidv4();
 
@@ -100,12 +100,15 @@ const schemauser = new mongoose.Schema(
   { timestamps: true }
 );
 
-
-// define a pre-save hook to generate a customId for each order
-schemauser.path('order').schema.pre('save', function(next) {
-  const uuid = uuidv4();
-  const customId = `order_${uuid}`;
-  this.order_id = customId;
+schemauser.pre("save", function (next) {
+  const user = this;
+  user.order.forEach(function (order) {
+    if (!order.order_id) {
+      const prefix = "order-";
+      const orderId = prefix + String(user.order.indexOf(order)).padStart(7, "0");
+      order.order_id = orderId;
+    }
+  });
   next();
 });
 

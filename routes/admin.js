@@ -139,7 +139,7 @@ admin_router.get(
   adminController.editcoupon
 );
 
-admin_router.get(
+admin_router.post(
   "/edited_coupon/:id",
   admin_auth.adminlogin,
   adminController.editedcoupon
@@ -171,5 +171,12 @@ admin_router.get('/sales-report/pdf',adminauth.adminlogin,adminController.pdfdow
 admin_router.get('/sales-report/excel',adminauth.adminlogin,adminController.exceldonload)
 
 
+//chart 
+admin_router.get('/sales', (req, res) => {
+  // Retrieve sales data from database using Mongoose
+  const salesData = [100, 200, 150, 300, 250, 800];
+
+  res.json(salesData);
+});
 
 module.exports = admin_router;

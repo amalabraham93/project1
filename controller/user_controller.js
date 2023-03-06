@@ -517,8 +517,11 @@ module.exports = {
         .limit(8)
         .lean();
       if (req.session.userid) {
+        const user = await User.findOne({ email: req.session.userid }).populate('cart.productid');
+        const cartItems = user.cart;
+        const totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
         res.render("users/userhome", {
-          layout: "layout",
+          layout: "layout",totalQuantity,
           user: req.session.userid,
           products,
         });
@@ -1081,7 +1084,7 @@ module.exports = {
               email: req.session.userid,
               "order.order_id": latestorder.order_id,
             },
-            { $set: { "order.$.status": "Placed" } }
+            { $set: { "order.$.status": "Payment Failed" } }
           );
 
           //   const orderdata = await User.findOne({ email: req.session.userid }, { order: { $slice: -1 } }).sort({ "order.order_date": -1 })

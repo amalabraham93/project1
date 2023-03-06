@@ -64,6 +64,13 @@ Handlebars.registerHelper('formatDate', function(date) {
 
 
 
+Handlebars.registerHelper('couponDate', function(dateString) {
+  const date = new Date(dateString);
+  const options = { month: 'numeric', day: 'numeric', year: 'numeric' };
+  const dateStr = date.toLocaleDateString('en-US', options);
+  return dateStr;
+});
+
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");

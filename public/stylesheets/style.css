@@ -155,44 +155,21 @@ input[type="button"]:hover:not(.active) {
 
 
 
-/* Active menu item */
+/* Active menu item
 .nav-item.active {
-  background-color: #9c8282; /* Change the background color */
-}
+  background-color: #361919; /* Change the background color */
+  /* border-radius: 5%;
+} */
 
 /* Active menu link */
-.nav-item.active .nav-link {
-  color: #000; /* Change the text color */
-}
+/* .nav-item.active .nav-link {
+  color: #5c5c5c; /* Change the text color */
+/* } */
+
+ */ */
 
 
 
-
-
-  /**
- * FilePond Custom Styles
- */
-.filepond--drop-label {
-	color: #4c4e53;
-}
-
-.filepond--label-action {
-	text-decoration-color: #babdc0;
-}
-
-.filepond--panel-root {
-	border-radius: 2em;
-	background-color: #edf0f4;
-	height: 1em;
-}
-
-.filepond--item-panel {
-	background-color: #595e68;
-}
-
-.filepond--drip-blob {
-	background-color: #7f8a9a;
-}
 
 
 /**
