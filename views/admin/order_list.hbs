@@ -1,46 +1,99 @@
-{{>admin_nav}}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+
+{{>admin_nav}} 
+
+
+
 
 
 
 <div class="col-lg-12 grid-margin stretch-card">
-  <div class="card">
-    <div class="card-body">
+	<div class="card">
+		<div class="card-body">
 
-     {{!-- <div class="container"> --}}
-		<h2>Order Table</h2>
-		<table class="table">
-			<thead class="thead-dark">
-				<tr>
-                    <th>no.</th>
-					<th>Order ID</th>
-					<th>Customer Name</th>
-					
-					<th>Order Total</th>
-					<th>Order Status</th>
-					<th>Order Details</th>
-					
-				</tr>
-			</thead>
-			
-			{{#each users}}
-			{{#each order}}
-			<tbody>
-				<tr>
-                    <td>{{inc @index}}</td>
-					<td>{{order_id}}</td>
-					<td>{{../name}}</td>
-					
-					<td>{{bill_amount}}</td>
-					<td>{{status}}</td>
-					<td><a href="/admin/order_details/{{this.order_id}}"><button class="btn btn-primary">View Details</button></a></td>
-				</tr>
-			</tbody>
-			{{/each}}
-			{{/each}}
-		</table>
-	{{!-- </div> --}}
-    </div>
-  </div>
+			{{!-- <div class="container"> --}}
+				<h2>Order Table</h2>
+				<table class="table">
+					<thead class="thead-dark">
+						<tr>
+							<th>no.</th>
+							<th>Order ID</th>
+							<th>Customer Name</th>
+
+							<th>Order Total</th>
+							<th>Order Status</th>
+							<th>Order Details</th>
+
+						</tr>
+					</thead>
+
+					{{#each users}}
+					{{#each order}}
+					<tbody>
+						<tr>
+							<td>{{inc @index}}</td>
+							<td>{{order_id}}</td>
+							<td>{{../name}}</td>
+
+							<td>{{bill_amount}}</td>
+							<td><a href="#" data-toggle="modal" data-target="#changeStatusModal"
+									data-order-id="{{order_id}}" data-current-status="{{status}}">{{status}}</a></td>
+							<td><a href="/admin/order_details/{{this.order_id}}"><button class="btn btn-primary">View
+										Details</button></a></td>
+						</tr>
+					</tbody>
+
+                  {{!-- status modal --}}
+					<div class="modal fade" id="changeStatusModal" tabindex="-1" role="dialog"
+						aria-labelledby="changeStatusModalLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="changeStatusModalLabel">Change Order Status</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<p>Current status: <span id="currentStatus">{{status}}</span></p>
+									<form id="changeStatusForm">
+										<div class="form-group">
+											<label for="newStatus">New Status:</label>
+											<select class="form-control" id="newStatus" name="newStatus">
+												<option value="Pending">Pending</option>
+												<option value="Placed">Placed</option>
+												<option value="Shipped">Shipped</option>
+												<option value="Delivered">Delivered</option>
+												<option value="Cancel">Cancel</option>
+												<option value="Payment Failed">Payment Failed</option>
+											</select>
+										</div>
+									</form>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+									<button type="submit" class="btn btn-primary" form="changeStatusForm" id="saveChangesBtn">Save
+										changes</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+
+					{{/each}}
+					{{/each}}
+				</table>
+				{{!--
+			</div> --}}
+		</div>
+	</div>
 </div>
 
 {{!-- onclick="window.location.href = '/admin/delete-product/{{this._id}}';" --}}
@@ -48,3 +101,39 @@
 {{!-- onclick="window.location.href = '/admin/undoDelete-product/{{this._id}}';" --}}
 
 {{>admin_footer}}
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+	$(document).ready(function () {
+		$('#changeStatusModal').on('show.bs.modal', function (event) {
+			var button = $(event.relatedTarget);
+			var orderId = button.data('order-id');
+			var currentStatus = button.data('current-status');
+			var modal = $(this);
+			modal.find('#currentStatus').text(currentStatus);
+			modal.find('#changeStatusForm').attr('action', '/admin/change-status/' + orderId);
+		});
+
+		$('#changeStatusForm').on('submit', function (event) {
+			event.preventDefault();
+			var form = $(this);
+			$.ajax({
+				type: 'POST',
+				url: url1,
+				data: form.serialize(),
+				success: function (data) {
+					$('#changeStatusModal').modal('hide');
+					location.reload(); // reload the page after the status has been updated
+				},
+				error: function () {
+					alert('An error occurred while updating the status.');
+				}
+			});
+		});
+	});
+</script>

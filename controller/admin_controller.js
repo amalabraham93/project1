@@ -164,7 +164,7 @@ unblockEmployee: async (req, res) => {
     User.find({})
       .lean()
       .then((users) => {
-        // console.log(users);
+         console.log(users);
 
         res.render("admin/userlist", {
           layout: "admin_layout",
@@ -247,6 +247,8 @@ unblockEmployee: async (req, res) => {
       res.redirect("/admin/admin_login");
     }
   },
+
+  
   readcategory: async function (req, res, next) {
     Category.find({})
       .lean()
@@ -538,6 +540,26 @@ unblockEmployee: async (req, res) => {
         .exec();
       console.log(users);
       res.render("admin/order_list", { layout: "admin_layout" ,users,admin:req.session.adminid});
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  orderstatus: async (req, res, next) => {
+    try {
+      const id = req.params.id
+      const status = req.body.newStatus;
+      console.log('dffgdfgdfgdfgdf'+id,status);
+      const updatedOrder = await User.updateOne(
+        {
+          
+          "order.order_id":  id ,
+        },
+        { $set: { "order.$.status": status } }
+      );
+      console.log(updatedOrder);
+      res.json({success:true})
+      // res.render("admin/order_list", { layout: "admin_layout" ,users,admin:req.session.adminid});
     } catch (error) {
       next(error);
     }
@@ -908,6 +930,59 @@ unblockEmployee: async (req, res) => {
     
       // End the response stream
       res.end();
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  chartsales: async (req, res, next) => {
+    try {
+     
+
+const revenueByDayOfWeek = await User.aggregate([
+  {
+    $unwind: "$order"
+  },
+  {
+    $group: {
+      _id: { $dayOfWeek: "$order.order_date" },
+      totalRevenue: { $sum: "$order.bill_amount" }
+    }
+  },
+  {
+    $project: {
+      dayOfWeek: "$_id",
+      totalRevenue: 1,
+      _id: 0
+    }
+  },
+  {
+    $sort: {
+      dayOfWeek: 1
+    }
+  }
+]);
+
+
+
+
+
+
+
+
+
+
+console.log(revenueByDayOfWeek);
+
+
+
+     
+    // conle.log(order)
+
+      // const salesData = [100, 200, 150, 300, 250, 800];
+
+        res.json(revenueByDayOfWeek);
+     
     } catch (error) {
       next(error);
     }

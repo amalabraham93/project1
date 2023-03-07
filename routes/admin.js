@@ -151,7 +151,13 @@ admin_router.get(
   adminauth.adminlogin,
   adminController.orderlist
 );
-admin_router.get("/order_details/:id", adminController.orderdetails);
+admin_router.get("/order_details/:id", admin_auth.adminlogin, adminController.orderdetails);
+
+admin_router.post(
+  "/change-status/:id",
+  admin_auth.adminlogin,
+  adminController.orderstatus
+);
 
 //stock management
 
@@ -172,11 +178,6 @@ admin_router.get('/sales-report/excel',adminauth.adminlogin,adminController.exce
 
 
 //chart 
-admin_router.get('/sales', (req, res) => {
-  // Retrieve sales data from database using Mongoose
-  const salesData = [100, 200, 150, 300, 250, 800];
-
-  res.json(salesData);
-});
+admin_router.get('/sales', adminController.chartsales);
 
 module.exports = admin_router;

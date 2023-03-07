@@ -898,7 +898,7 @@ module.exports = {
           total: orderData.subtotal,
           bill_amount: orderData.Total,
           payment_method: orderData.payment_method,
-          status: "pending",
+          status: "Pending",
           delivery_address: orderData.address,
           coupon: orderData.coupon,
           coupon_discount: orderData.coupon_discount,
@@ -1108,19 +1108,23 @@ module.exports = {
   orderhistory: async (req, res, next) => {
     try {
       if (req.session.userid) {
-        const orderdata = await User.find(
-          { email: req.session.userid },
-          { order: 1, _id: 0 }
-        )
-          .sort({ "order.order_date": -1 }) // change the sorting order to 1 for ascending order
-          .populate("order.product.product")
-          .lean()
-          .exec();
+        const orderdata = await User.aggregate([
+          { $match: { email:req.session.userid } },
+          { $unwind: '$order' },
+          { $sort: { 'order.order_date': -1 } },
+            { $lookup: {
+              from: 'product',
+              localField: 'order.product.product',
+              foreignField: '_id',
+              as: 'order.product.product',
+            }},
+          { $group: { _id: '$_id', order: { $push: '$order' } } },
+          { $project: { _id: 0, order: 1 } },
+        ])
+        .exec();
           
         // res.send(response)
-        console.log(orderdata);
-
-
+        // console.log(orderdata[0].order[0].product[0]);
       
         res.render("users/order_history", { layout: "layout", user: req.session.userid, orderdata });
       }

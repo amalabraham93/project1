@@ -1,26 +1,44 @@
+const { Chart } = require("chart.js");
+
 // public/js/sales.js
-const ctx = document.getElementById('salesChart').getContext('2d');
-const salesChart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    datasets: [{
-      label: 'Sales',
-      data: [],
-      borderColor: 'rgba(255, 99, 132, 1)',
-      backgroundColor: 'rgba(255, 99, 132, 0.2)',
-      tension: 0.4
+const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+const salesChart = {
+  labels: revenueByDayOfWeek.map(data => daysOfWeek[data.dayOfWeek - 1]),
+  datasets: [{
+    label: 'Revenue by Day of Week',
+    data:[] ,
+    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+    borderColor: 'rgba(54, 162, 235, 1)',
+    borderWidth: 1
+  }]
+};
+
+const options = {
+  scales: {
+    yAxes: [{
+      ticks: {
+        beginAtZero: true
+      }
     }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false
   }
+};
+
+const chart = new Chart(ctx, {
+  type: 'bar',
+  data: data,
+  options: options
 });
+
+
+
+
+
+
 
 fetch('/admin/sales')
   .then(response => response.json())
   .then(data => {
-    salesChart.data.datasets[0].data = data;
+    salesChart.data.datasets[0].data = data.map(data => data.totalRevenue);
     salesChart.update();
   });

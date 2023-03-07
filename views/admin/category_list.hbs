@@ -19,7 +19,7 @@
             <th scope="row">{{inc @index}}</th>
             <td>{{this.categoryname}}</td>
             <td>{{this.discription}}</td>
-            <td>{{this.created_date}}</td>
+            <td>{{formatDate this.created_date}}</td>
             <td>{{this.status}}</td>
             <td>{{this.delete}}</td>
             <td><a class="me-3" href="/admin/disablecategory?id={{this._id}}"><img style="width: 20px; height: 20px;"
