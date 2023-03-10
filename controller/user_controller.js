@@ -864,6 +864,7 @@ module.exports = {
           .populate("cart.productid")
           .lean()
           .exec();
+          console.log(cart1)
 
         res.render("users/checkout", {
           layout: "layout",
@@ -878,6 +879,37 @@ module.exports = {
   },
 
 
+
+  buynow: async (req, res, next) => {
+    try {
+      if (req.session.userid) {
+        const id = req.params.id
+     
+        const address = await User.findOne(
+          { email: req.session.userid },
+          { address: 1, _id: 0 }
+        ).lean();
+
+        const product = await productCollection.findOne({ _id: id })
+        const cart1 = {
+          cart:[{productid:{Name:product.Name,
+              _id:product._id,
+            Price:product.Price},
+            quantity:1
+          }]
+        };
+        
+        res.render("users/checkout", {
+          layout: "layout",
+          address,
+          cart1,
+          user: req.session.userid,
+        });
+      }
+    } catch (error) {
+      next(error);
+    }
+  },
 
 
 
@@ -1108,25 +1140,43 @@ module.exports = {
   orderhistory: async (req, res, next) => {
     try {
       if (req.session.userid) {
-        const orderdata = await User.aggregate([
-          { $match: { email:req.session.userid } },
-          { $unwind: '$order' },
-          { $sort: { 'order.order_date': -1 } },
-            { $lookup: {
-              from: 'product',
-              localField: 'order.product.product',
-              foreignField: '_id',
-              as: 'order.product.product',
-            }},
-          { $group: { _id: '$_id', order: { $push: '$order' } } },
-          { $project: { _id: 0, order: 1 } },
-        ])
-        .exec();
+        // const orderdata = await User.aggregate([
+        //   { $match: { email: req.session.userid } },
+        //   { $unwind: "$order" },
+        //   { $sort: { "order.order_date": -1 } },
+        //   {
+        //     $lookup: {
+        //       from: "product",
+        //       localField: "order.product.product",
+        //       foreignField: "_id",
+        //       as:"order.product.product",
+        //     },
+        //   },
+        //   { $group: { _id: "$_id", order: { $push: "$order" } } },
+        //   { $project: { _id: 0, order: 1 } },
+        // ]).exec();
+
+              
+       console.log('jbhshjhahhbhjabhjcbss')
+
+
+        const orderdata1 = await User.aggregate([
+          { $match: { email: req.session.userid } },
+          { $unwind: "$order" },
+          { $sort: { "order.order_date": -1 } },
+          { $group: { _id: "$_id", order: { $push: "$order" } } },
+          // { $project: { _id: 0, order: 1 } },
+       ])
+     const orderdata = await User.populate(orderdata1,{path: 'order.product.product',model: 'product'})
+        
+       
+        console.log(orderdata);
+       
           
         // res.send(response)
-        // console.log(orderdata[0].order[0].product[0]);
+        
+       res.render("users/order_history", { layout: "layout", user: req.session.userid, orderdata });
       
-        res.render("users/order_history", { layout: "layout", user: req.session.userid, orderdata });
       }
     } catch (error) {
       next(error);

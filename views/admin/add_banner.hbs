@@ -1,0 +1,64 @@
+<style>
+    form {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  margin-top: 20px;
+}
+
+label {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+input[type="file"] {
+  margin-bottom: 20px;
+}
+
+input[type="text"],
+select {
+  margin-bottom: 10px;
+  padding: 5px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+select {
+  width: 100%;
+}
+
+button[type="submit"] {
+  background-color: #008CBA;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: #005b8e;
+}
+</style>
+
+
+{{>admin_nav}}
+
+<h3>Add Banner </h3>
+<form action="/admin/added-banner" method="POST" enctype="multipart/form-data">
+  <label for="image">Image:</label>
+  <input type="file" name="image" id="image" required>
+  {{!-- <label for="link">Link:</label>
+  <input type="text" name="link" id="link" required> --}}
+   <label for="link">Discription:</label>
+  <input type="text" name="discription" id="discription" required>
+  {{!-- <label for="target">Target:</label>
+  <select name="target" id="target" required> --}}
+    {{!-- <option value="cart">Add to cart</option>
+    <option value="category">Category</option>
+  </select> --}}
+  <button type="submit">Add Banner</button>
+</form>
+
+{{>admin_footer}}

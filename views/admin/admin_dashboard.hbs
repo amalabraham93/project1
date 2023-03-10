@@ -120,7 +120,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title">Order Summary</h4>
-                                    <div id="morris-bar-chart"></div>
+                                   <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
                                 </div>
                             </div>
                             
@@ -129,7 +129,7 @@
                             <div class="card card-widget">
                                 <div class="card-body">
                                     <h5 class="text-muted">Order Overview </h5>
-                                    <h2 class="mt-4">5680</h2>
+                                    <h2 class="mt-4">{{profit.[0].totalProfit}}</h2>
                                     <span>Total Revenue</span>
                                     <div class="mt-4">
                                         <h4>30</h4>
@@ -159,7 +159,7 @@
                             </div>
                             
                         </div>
-                        <div class="col-lg-3 col-md-6">
+                        {{!-- <div class="col-lg-3 col-md-6">
                             <div class="card">
                                 <div class="card-body px-0">
                                     <h4 class="card-title px-4 mb-3">Todo</h4>
@@ -180,10 +180,10 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 
-                <div class="row">
+                {{!-- <div class="row">
                     <div class="col-lg-3 col-sm-6">
                         <div class="card">
                             <div class="card-body">
@@ -233,9 +233,9 @@
                         </div>
                     </div>
 
-                </div>
+                </div> --}}
 
-                <div class="row">
+                {{!-- <div class="row">
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body">
@@ -364,9 +364,9 @@
                             </div>
                         </div>                        
                     </div>
-                </div>
+                </div> --}}
 
-                <div class="row">
+                {{!-- <div class="row">
                     <div class="col-xl-3 col-lg-6 col-sm-6 col-xxl-6">
 
                         <div class="card">
@@ -383,7 +383,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                        <canvas id="chart_widget_3"></canvas>
+                                      
                                 </div>
                             </div>
                             <div class="card-body border-top pt-4">
@@ -404,8 +404,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-6 col-sm-6 col-xxl-6">
+                    </div> --}}
+                    {{!-- <div class="col-xl-3 col-lg-6 col-sm-6 col-xxl-6">
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title">Activity</h4>
@@ -451,30 +451,30 @@
                                             <h5>New support ticket received</h5>
                                             <p class="mb-0">I shared this on my fb wall a few months back,</p>
                                         </div><span class="text-muted ">April 24, 2018</span>
-                                    </div>
-                                    <div class="media pt-3 pb-3">
+                                    </div> --}}
+                                    {{!-- <div class="media pt-3 pb-3">
                                         <img width="35" src="/admin_assets/images/avatar/3.jpg" class="mr-3 rounded-circle">
                                         <div class="media-body">
                                             <h5>Facebook Post 30 Comments</h5>
                                             <p class="mb-0">I shared this on my fb wall a few months back,</p>
                                         </div><span class="text-muted ">April 24, 2018</span>
-                                    </div>
+                                    </div> 
                                 </div>
                             </div>
-                        </div>
+                        </div>--}}
                     </div>
-                    <div class="col-xl-6 col-lg-12 col-sm-12 col-xxl-12">
+                    {{!-- <div class="col-xl-6 col-lg-12 col-sm-12 col-xxl-12">
                         <div class="card">
                             <div class="card-body">
-                                    <canvas id="salesChart"></canvas>
+                                   
                             </div>        
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
                 
 
-                <div class="row">
+                {{!-- <div class="row">
                         <div class="col-lg-3 col-sm-6">
                             <div class="card">
                                 <div class="social-graph-wrapper widget-facebook">
@@ -560,7 +560,7 @@
                             </div>
                         </div>
                     </div>
-            </div>
+            </div> --}}
             <!-- #/ container -->
         </div>
 
@@ -689,4 +689,30 @@
         }
     }
 
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script>
+    
+    var xValues = [{{dayOfWeekArray}}];
+var yValues = [{{revenueArray}}];
+var barColors = ["red", "green","blue","orange","brown"];
+
+new Chart("myChart", {
+  type: "bar",
+  data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: "weekly Revenue"
+    }
+  }
+});
 </script>

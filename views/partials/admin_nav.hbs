@@ -1,15 +1,26 @@
 <style>
-    /* style for active menu item */
-.nav-item.active > .nav-link {
-  background-color: #007bff;
-  color: #fff;
-}
+         
 
-/* style for hover effect */
-.nav-item:hover > .nav-link {
-  background-color: #f8f9fa;
-  color: #000;
-}
+            /* style for active menu item */
+            .nav-item.active>.nav-link {
+                background-color: #007bff;
+                color: #fff;
+            }
+
+            {{!-- /* style for hover effect */
+            .nav-item:hover>.nav-link {
+                background-color: #f8f9fa;
+                color: #000;
+            } --}}
+
+            
+       
+    
+
+    .nav-item li.active {
+        background-color: #f0f0f0;
+        font-weight: bold;
+    }
 </style>
 
 
@@ -169,6 +180,25 @@
                                 </li>
                             </ul>
                         </li>
+                        {{!-- BANNER --}}
+                        <li class="nav-item ">
+                            <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
+                                style=" color:#fff">
+                                <i class="fs-4 bi-speedometer2"></i> <span
+                                    class="ms-1 d-none d-sm-inline">BANNER</span>
+                            </a>
+                            <ul class="collapse  nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+                                <li class="nav-item ">
+                                    <a href="/admin/list-banner" class="nav-link px-0" style=" color:#fff"> <span
+                                            class="d-none d-sm-inline">BANNER LIST</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item ">
+                                    <a href="/admin/add-banner" class="nav-link px-0" style=" color:#fff"> <span
+                                            class="d-none d-sm-inline">ADD BANNER</span> </a>
+                                </li>
+                            </ul>
+                        </li>
                 </ul>
                 <hr>
                 {{!-- <div class="dropdown pb-4">
@@ -190,6 +220,9 @@
                 </div> --}}
             </div>
         </div>
+    
+
+
 
         {{!-- user table --}}
         <div class="col py-3">
@@ -202,7 +235,34 @@
 
 
 
+                   
                     <script>
-                        document.querySelector('.nav-item.active').classList.remove('active');
-                        event.target.closest('.nav-item').classList.add('active');
-                    </script>
+                         document.querySelector('.nav-item.active').classList.remove('active');
+                         event.target.closest('.nav-item').classList.add('active');
+
+                        // Get all menu items
+                      const menuItems = document.querySelectorAll('.nav-link');
+
+                         // Add a click event listener to each menu item
+                        menuItems.forEach(item => {
+                            item.addEventListener('click', function () {
+                                // Remove the 'active' class from all menu items
+                                menuItems.forEach(item => {
+                                    item.classList.remove('active');
+                                });
+                                // Add the 'active' class to the clicked menu item
+                                this.classList.add('active');
+                            });
+                        }); 
+
+                       
+                    </script>  
+
+
+{{!-- 
+                    <script>
+                        $(document).ready(function () {
+                            var url = window.location.href;
+                            $('#menu a[href="' + url + '"]').closest('li').addClass('active');
+                        });
+                    </script> --}}

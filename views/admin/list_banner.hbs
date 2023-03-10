@@ -1,0 +1,46 @@
+{{>admin_nav}}
+
+
+
+<h1>Banners</h1>
+
+
+  <table>
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Link</th>
+        <th>Target</th>
+        <th>Description</th>
+        <th>Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each banners}}
+        <tr>
+          <td>{{this.image}}</td>
+          {{!-- <td>{{this.link}}</td>
+          <td>{{this.target}}</td> --}}
+          <td>{{this.description}}</td>
+          <td><a href="/admin/edit_banner/{{this._id}}">Edit</a></td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{{>admin_footer}}

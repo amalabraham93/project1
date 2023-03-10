@@ -137,6 +137,7 @@
               <label class="upload__btn">
                 <p>Upload images</p>
                 <input type="file" multiple="" data-max_length="20" class="upload__inputfile">
+                 
               </label>
             </div>
             <div class="upload__img-wrap">
@@ -148,11 +149,12 @@
               </div>
               {{/each}}
             </div>
-          </div>
+            {{!-- <div class="upload__img-wrap"></div> --}}
+       </div>
+          
 
 
-
-
+         <input type="hidden" name="productid" id="productid" value="{{products._id}}">
 
 
           {{!-- <img src="/productImages/{{products.image.[1]}}" alt="" style="height:auto;width:50px" id="imgView">
@@ -183,13 +185,13 @@
     </div>
   </div>
 </div>
-<script>
-
-
-  { {> admin_footer } }
 
 
 
+  {{> admin_footer }}
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
 <script>
@@ -205,8 +207,10 @@
       $(this).on('change', function (e) {
         imgWrap = $(this).closest('.upload__box').find('.upload__img-wrap');
         var maxLength = $(this).attr('data-max_length');
+      console.log('imageId')
 
         var files = e.target.files;
+        console.log(files)
         var filesArr = Array.prototype.slice.call(files);
         var iterator = 0;
         filesArr.forEach(function (f, index) {
@@ -231,7 +235,7 @@
 
               var reader = new FileReader();
               reader.onload = function (e) {
-                var html = "<div class='upload__img-box'><div style='background-image: url(" + e.target.result + ")' data-number='" + $(".upload__img-close").length + "' data-file='" + f.name + "' class='img-bg'><div class='upload__img-close'></div></div><img src='" + e.target.result + "' class='upload__img-preview'></div>";
+               var html = "<div class='upload__img-box'><div style='background-image: url(" + e.target.result + ")' data-number='" + $(".upload__img-close").length + "' data-file='" + f.name + "' class='img-bg'><div class='upload__img-close'></div></div></div>";
                 imgWrap.append(html);
                 iterator++;
               }
@@ -244,13 +248,16 @@
 
     $('body').on('click', ".upload__img-close", function (e) {
       var imageId = $(this).parent().data("id");
-      console.log(imageId)
+      const data1 = $('#productid').val()
       if (imageId) {
+           
+          console.log(data1)
 
         // if the image is already saved, delete it from the database and the server
         $.ajax({
-          type: "DELETE",
-          url: "/images/" + imageId,
+          method: "post",
+          url: "/admin/unlinkimages/" + imageId,
+          data: {data1},
           success: function (response) {
             console.log(response);
             $(this).parent().parent().remove();

@@ -82,6 +82,7 @@ router.get('/product_details/:id', userController.singleProduct);
 
 //cart management
 
+router.get('/buynow/:id',userauth.userlogin ,userController.buynow)
 
 router.get('/addtocart/:id',userauth.userlogin ,userController.addtocart)
 

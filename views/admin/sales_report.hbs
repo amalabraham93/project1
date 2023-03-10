@@ -1,8 +1,10 @@
 {{>admin_nav}}
 
+<div >
+  <h1 style="text-align: center; margin-bottom: 10%;">Sales-Report</h1>
+</div>
 
-
-
+<div>
 <form action="/admin/sales-report" method="post">
   <label for="start-date">Start Date</label>
   <input type="date" id="start-date" name="start-date">
@@ -12,7 +14,7 @@
 
   <button class="btn btn-primary" type="submit">Generate Report</button>
 </form>
-
+</div>
 
 
 
@@ -45,8 +47,8 @@
  
   </table>
   <br>
-    <a href="/admin/sales-report/excel?startDate={{startDate}}&endDate={{endDate}}">Download Excel</a>
-    <a href="/admin/sales-report/pdf?startDate={{startDate}}&endDate={{endDate}}">Download PDF</a>
+    <a class="btn btn-primary mb-2" href="/admin/sales-report/excel?startDate={{startDate}}&endDate={{endDate}}">Download Excel</a> 
+    <a class="btn btn-primary" href="/admin/sales-report/pdf?startDate={{startDate}}&endDate={{endDate}}">Download PDF</a>
 {{else}}
   <p>No orders found</p>
 {{/if}}

@@ -1,0 +1,30 @@
+{{>admin_nav}}
+
+<h1>Edit Banner</h1>
+
+<form method="POST" action="/admin/edited_banner/{{banner._id}}">
+  <div>
+    <label for="image">Image URL:</label>
+    <input type="text" id="image" name="image" value="/productImages/{{banner.image}}">
+  </div>
+  <div>
+    {{!-- <label for="link">Link URL:</label>
+    <input type="text" id="link" name="link" value="{{banner.link}}">
+  </div> --}}
+  <div>
+    {{!-- <label for="target">Target:</label>
+    <select id="target" name="target">
+      <option value="cart" {{#if (eq banner.target "cart")}}selected{{/if}}>Cart</option>
+      <option value="category" {{#if (eq banner.target "category")}}selected{{/if}}>Category</option>
+    </select> --}}
+  </div>
+  <div>
+    <label for="description">Description:</label>
+    <textarea id="description" name="description">{{banner.description}}</textarea>
+  </div>
+  <button type="submit">Save</button>
+</form>
+
+
+
+{{>admin_footer}}

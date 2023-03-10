@@ -81,23 +81,27 @@
             <h1 class="text-center">Order History</h1>
             <div class="row">
                 <div class="col-md-12">
+                            {{log orderdata.[0].order.[0].product}}    
                    {{#each orderdata.[0].order}}  
                    <div class="order-container">
                    
                         <div class="order-details">
                            
-                            <div>
+                            <div> 
                          {{#each product}}
+                       {{#each this.product}}    
+
                              <div>
                             <img class="order-image" src="/productImages/{{this.image.[0]}}" style="width: 20%;">
                             </div>
-                           {{/each}}
+                            {{/each}}
+                          {{/each}}
                             </div>
                             
                             <div>
                                 <p class="order-number">Order Number: {{this.order_id}}</p>
                                 <p class="order-date">Date: {{formatDate this.order_date}}</p>
-
+                                 
                                 <p class="order-amount">Total Amount: ${{this.bill_amount}}</p>
                                 <p class="order-status">Status: {{this.status}}</p>
                             </div>

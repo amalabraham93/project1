@@ -93,23 +93,13 @@ admin_router.get(
   adminController.productAdd
 );
 
-admin_router.post(
-  "/add_product",
-  upload.array("productImage", 20),
-  adminController.productAdder
-);
+admin_router.post("/add_product",upload.array("productImage", 20),adminController.productAdder);
 
-admin_router.get(
-  "/edit_products/:id",
-  adminauth.adminlogin,
-  adminController.productEdit
-);
+admin_router.post("/edited_product/:id",upload.array("productImage", 20),adminController.productEditor);
 
-admin_router.post(
-  "/edited_product/:id",
-  upload.array("productImage", 20),
-  adminController.productEditor
-);
+admin_router.get("/edit_products/:id",adminauth.adminlogin,adminController.productEdit);
+
+admin_router.post( "/unlinkimages/:id", adminController.unlinkimage);
 
 admin_router.post("/delete-product/:id", adminController.deleteProduct);
 // undo delete
@@ -117,55 +107,30 @@ admin_router.post("/undoDelete-product/:id", adminController.unhideProduct);
 
 //coupon management
 
-admin_router.get(
-  "/coupon_list",
-  admin_auth.adminlogin,
-  adminController.couponlist
-);
+admin_router.get("/coupon_list",admin_auth.adminlogin, adminController.couponlist);
 
 admin_router.get("/add_coupons", admin_auth.adminlogin, (req, res) => {
-  res.render("admin/add_coupons", { layout: "admin_layout" });
-});
+  res.render("admin/add_coupons", { layout: "admin_layout" });});
 
-admin_router.post(
-  "/add_newcoupon",
-  admin_auth.adminlogin,
-  adminController.addcoupon
-);
+admin_router.post("/add_newcoupon",admin_auth.adminlogin,adminController.addcoupon);
 
-admin_router.get(
-  "/edit_coupons/:id",
-  admin_auth.adminlogin,
-  adminController.editcoupon
-);
+admin_router.get("/edit_coupons/:id",admin_auth.adminlogin,adminController.editcoupon);
 
-admin_router.post(
-  "/edited_coupon/:id",
-  admin_auth.adminlogin,
-  adminController.editedcoupon
-);
+admin_router.post("/edited_coupon/:id",admin_auth.adminlogin,adminController.editedcoupon);
+
+admin_router.get("/coupon_act/:id",admin_auth.adminlogin,adminController.activecoupon);
+
+admin_router.get("/coupon_inact/:id",admin_auth.adminlogin, adminController.inactivecoupon);
 //order management
 
-admin_router.get(
-  "/order_list",
-  adminauth.adminlogin,
-  adminController.orderlist
-);
+admin_router.get("/order_list",adminauth.adminlogin,adminController.orderlist);
 admin_router.get("/order_details/:id", admin_auth.adminlogin, adminController.orderdetails);
 
-admin_router.post(
-  "/change-status/:id",
-  admin_auth.adminlogin,
-  adminController.orderstatus
-);
+admin_router.post("/change-status",admin_auth.adminlogin,adminController.orderstatus);
 
 //stock management
 
-admin_router.get(
-  "/stock_list",
-  adminauth.adminlogin,
-  adminController.stocklist
-);
+admin_router.get("/stock_list",adminauth.adminlogin,adminController.stocklist);
 
 
 
@@ -178,6 +143,15 @@ admin_router.get('/sales-report/excel',adminauth.adminlogin,adminController.exce
 
 
 //chart 
-admin_router.get('/sales', adminController.chartsales);
+// admin_router.get('/sales', adminController.chartsales);
+
+//Banner Management
+admin_router.get('/list-banner',adminController.listbanner)
+
+admin_router.get('/add-banner', adminauth.adminlogin,adminController.addbanner)
+admin_router.post('/added-banner', upload.single("productImage"),adminController.addedbanner)
+admin_router.get('/edit_banner/:id', adminauth.adminlogin,adminController.editbanner)
+admin_router.post('/edited_banner/:id', adminauth.adminlogin,adminController.editedbanner)
+
 
 module.exports = admin_router;

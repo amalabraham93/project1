@@ -13,6 +13,7 @@ const product = require("../model/products_schema");
 const fs = require('fs');
 const Excel = require('exceljs');
  const moment = require("moment");
+ const Banner = require('../model/banner_schema')
 // const pdfMake = require("pdfmake");
 let session;
 
@@ -45,11 +46,87 @@ module.exports = {
         ]).exec()
         const totalusers = await User.countDocuments({}).lean()
         console.log(totalusers)
-        
+
+
+        //chart
+        const delivered = await User.aggregate([
+          {
+            $unwind: '$order'
+          },
+          {
+            $match: {
+              'order.status': 'Placed'
+            }
+          },
+          {
+            $group: {
+              _id: '$_id',
+              name: {
+                $first: '$name'
+              },
+              placedOrderCount: {
+                $sum: 1
+              }
+            }
+          }
+        ])
+       console.log(delivered)
+
+
+
+  const revenueByDayOfWeek = await User.aggregate([
+  {
+    $unwind: "$order"
+  },
+  {
+    $group: {
+      _id: { $dayOfWeek: "$order.order_date" },
+      totalRevenue: { $sum: "$order.bill_amount" }
+    }
+  },
+  {
+    $project: {
+      dayOfWeek: "$_id",
+      totalRevenue: 1,
+      _id: 0
+    }
+  },
+  {
+    $sort: {
+      dayOfWeek: 1
+    }
+  }
+]);
+
+console.log(revenueByDayOfWeek);
+
+      
+const revenueArray = revenueByDayOfWeek.map(result => result.totalRevenue);
+const dayOfWeekArray = revenueByDayOfWeek.map(result => result.dayOfWeek);
+
+    console.log(revenueArray)   
+    
+    // const numorder= await User.aggregate([
+    //   // Filter orders with a non-null delivery_date
+    //   { $match: { 'order.delivery_date': { $exists: true } } },
+    //   // Group orders by week and count the number of orders
+    //   {
+    //     $group: {
+    //       _id: { $week: '$order.delivery_date' },
+    //       count: { $sum: 1 }
+    //     }
+    //   },
+    //   // Sort by week in ascending order
+    //   { $sort: { _id: 1 } }
+    // ])
+    //  console.log(numorder)
+
+
+
 
        const admindata = await Admin.find({email:req.session.adminid},{super_admin:1,_id:0}).lean()
        console.log(admindata.super_admin);
-         res.render('admin/admin_dashboard',{layout:'admin_layout',admin:req.session.adminid,totalsold,profit,totalusers});
+         res.render('admin/admin_dashboard',{layout:'admin_layout',admin:req.session.adminid,totalsold,profit,totalusers,revenueArray,dayOfWeekArray});
       }
      
      } catch (error) {
@@ -476,32 +553,77 @@ unblockEmployee: async (req, res) => {
     }
   },
 
+
+  unlinkimage: async (req, res, next) => {
+    try {
+      // if (req.session.adminLoggedIn) {
+        console.log(req.body);
+     const proid  = req.body.data1
+      const imgid = req.params.id
+      console.log('hkzhzjhcvkzhcvjkhzxkvjhzjhvkzjhvjzhvkjz'+ proid,imgid);
+      const imgurl = './public/productImages/'+imgid 
+      // let categorys = await category.find({ delete: false }).lean();
+      fs.unlink(imgurl)
+
+      let products = await product.updateOne({ _id: proid },{$pull:{image:imgid}})
+       console.log(products);
+       res.json({success:true})
+      // } else {
+      //     res.redirect('/admin')
+      // }
+    } catch (error) {
+      next(error);
+    }
+  },
+
   productEditor: async (req, res, next) => {
     try {
+      console.log(req.files.filename)
       // console.log(req.body);
+      const imageName = [];
+      for (file of req.files) {
+        imageName.push(file.filename);
+      }
       const Name = req.body.Name
       const regname = new RegExp(Name,'i')
       proId = req.params.id;
       const product = await productCollection.findOne({ _id: proId });
       const category = await Category.findOne({categoryname:req.body.Category}).lean()
 
-      product.Name = req.body.Name;
-      product.Brand = req.body.Brand;
-      product.Quantity = req.body.Quantity;
-      product.categoryid = category._id;
-      product.Price = req.body.Price;
-      product.Description = req.body.Description;
-      product.archive = false;
-      await product.save();
-      res.redirect("/admin/productlist");
+      if (req.files) {
+        await productCollection.updateOne(
+          { _id: proId },
+          {
+            $set: { Name : req.body.Name,
+      Brand : req.body.Brand,
+      Quantity : req.body.Quantity,
+      categoryid : category._id,
+      Price : req.body.Price,
+      Description : req.body.Description,
+      image : imageName, 
+      archive : false,
+    }})
 
-      if (req.files.Image) {
-        let image = req.files.Image;
-        let proid = req.params.id;
-        image.mv("./public/productImages/" + product.proid + ".jpg");
-      }
+    }else{
+      await productCollection.updateOne(
+        { _id: proId },
+        {
+          $set: { Name : req.body.Name,
+    Brand : req.body.Brand,
+    Quantity : req.body.Quantity,
+    categoryid : category._id,
+    Price : req.body.Price,
+    Description : req.body.Description,
+    archive : false,
+  }})
+
+    }
+      
+
+      
+      res.redirect("/admin/productlist");
     } catch (error) {
-      next(err);
+      next(error);
     }
   },
 
@@ -547,8 +669,8 @@ unblockEmployee: async (req, res) => {
 
   orderstatus: async (req, res, next) => {
     try {
-      const id = req.params.id
-      const status = req.body.newStatus;
+      const id = req.body.order_id
+      const status = req.body.new_status;
       console.log('dffgdfgdfgdfgdf'+id,status);
       const updatedOrder = await User.updateOne(
         {
@@ -623,17 +745,19 @@ unblockEmployee: async (req, res) => {
 
   editcoupon: async (req, res, next) => {
     try {
-      const { id } = req.params;
+      const  id  = req.params.id;
       // const updatedCoupon = req.body;
   
       const coupon = await Coupon.findOne({_id:id}).lean();
       console.log(coupon);
   
       if (!coupon) {
-        // return res.status(404).json({ message: 'Coupon not found' });
+         return res.status(404).json({ message: 'Coupon not found' });
+
+      }else{
+              res.render('admin/edit_coupons',{ layout: "admin_layout" ,coupon,admin:req.session.adminid});
 
       }
-      res.render('admin/edit_coupons',{ layout: "admin_layout" ,coupon,admin:req.session.adminid});
       // res.json(coupon);
     } catch (error) {
       next(error);
@@ -657,6 +781,31 @@ unblockEmployee: async (req, res) => {
       next(error);
     }
   },
+
+  activecoupon: async(req,res,next)=>{
+       try {
+        const { id } = req.params;
+
+        const coupon = await Coupon.updateOne({_id:id},{$set:{status:"active"}} );
+         res.json({success:true})
+       } catch (error) {
+        next(error)
+        
+       }
+  },
+  inactivecoupon: async(req,res,next)=>{
+    try {
+     const { id } = req.params;
+
+     const coupon = await Coupon.updateOne({_id:id},{$set:{status:"inactive"}} );
+    
+     res.json({success:true})
+
+    } catch (error) {
+     next(error)
+     
+    }
+},
 
 
 
@@ -935,60 +1084,124 @@ unblockEmployee: async (req, res) => {
     }
   },
 
-  chartsales: async (req, res, next) => {
+// chartsales: async (req, res, next) => {
+//     try {
+     
+
+// const revenueByDayOfWeek = await User.aggregate([
+//   {
+//     $unwind: "$order"
+//   },
+//   {
+//     $group: {
+//       _id: { $dayOfWeek: "$order.order_date" },
+//       totalRevenue: { $sum: "$order.bill_amount" }
+//     }
+//   },
+//   {
+//     $project: {
+//       dayOfWeek: "$_id",
+//       totalRevenue: 1,
+//       _id: 0
+//     }
+//   },
+//   {
+//     $sort: {
+//       dayOfWeek: 1
+//     }
+//   }
+// ]);
+
+
+
+
+
+
+
+
+
+
+// console.log(revenueByDayOfWeek);
+
+
+     
+//     // conle.log(order)
+
+//        const salesData = [100, 200, 150, 300, 250, 800];
+
+//         res.json(salesData);
+     
+//     } catch (error) {
+//       next(error);
+//     }
+//   },
+
+listbanner: async (req, res, next) => {
+  try {
+       const banner = await Banner.find({}).lean()
+    res.render('admin/list_banner',{ layout: "admin_layout" ,banner, admin:req.session.adminid});
+   
+  } catch (error) {
+    next(error);
+  }
+},
+
+
+
+
+addbanner: async (req, res, next) => {
     try {
      
-
-const revenueByDayOfWeek = await User.aggregate([
-  {
-    $unwind: "$order"
-  },
-  {
-    $group: {
-      _id: { $dayOfWeek: "$order.order_date" },
-      totalRevenue: { $sum: "$order.bill_amount" }
-    }
-  },
-  {
-    $project: {
-      dayOfWeek: "$_id",
-      totalRevenue: 1,
-      _id: 0
-    }
-  },
-  {
-    $sort: {
-      dayOfWeek: 1
-    }
-  }
-]);
-
-
-
-
-
-
-
-
-
-
-console.log(revenueByDayOfWeek);
-
-
-
-     
-    // conle.log(order)
-
-      // const salesData = [100, 200, 150, 300, 250, 800];
-
-        res.json(revenueByDayOfWeek);
+      res.render('admin/add_banner',{ layout: "admin_layout" , admin:req.session.adminid});
      
     } catch (error) {
       next(error);
     }
   },
 
+  addedbanner: async (req, res) => {
+    console.log(req.body)
+    const { discription } = req.body;
+    const image = req.file.filename;
+    try {
+      await Banner.create({ image, discription });
+      res.redirect('/admin/add-banner');
+    } catch (err) {
+      console.error(err);
+      res.render('error', { message: 'Something went wrong' });
+    }
+  
+    },
+ 
 
+
+    editbanner: async (req, res) => {
+      const id = req.params;
+      try {
+       const banner = await Banner.findOne({_id:id});
+       res.render('admin/edit_banner',{ layout: "admin_layout" ,banner, admin:req.session.adminid});
+      } catch (err) {
+        console.error(err);
+        res.render('error', { message: 'Something went wrong' });
+      }
+    
+      },
+
+      editedbanner: async (req, res) => {
+        try {
+          const banner = await Banner.findByIdAndUpdate(req.params.id, {
+            image: req.body.image,
+            // link: req.body.link,
+            // target: req.body.target,
+            description: req.body.description
+          }, { new: true });
+          res.redirect('/banners');
+        } catch (err) {
+          console.error(err);
+          res.status(500).send('Internal server error');
+        }
+      },
+  
 
 
 
