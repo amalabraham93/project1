@@ -7,11 +7,11 @@
                 color: #fff;
             }
 
-            {{!-- /* style for hover effect */
+             /* style for hover effect */
             .nav-item:hover>.nav-link {
                 background-color: #f8f9fa;
                 color: #000;
-            } --}}
+            } 
 
             
        
@@ -20,6 +20,7 @@
     .nav-item li.active {
         background-color: #f0f0f0;
         font-weight: bold;
+        color: #000;
     }
 </style>
 
@@ -182,12 +183,12 @@
                         </li>
                         {{!-- BANNER --}}
                         <li class="nav-item ">
-                            <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
+                            <a href="#submenu4" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
                                 style=" color:#fff">
                                 <i class="fs-4 bi-speedometer2"></i> <span
                                     class="ms-1 d-none d-sm-inline">BANNER</span>
                             </a>
-                            <ul class="collapse  nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+                            <ul class="collapse  nav flex-column ms-1" id="submenu4" data-bs-parent="#menu">
                                 <li class="nav-item ">
                                     <a href="/admin/list-banner" class="nav-link px-0" style=" color:#fff"> <span
                                             class="d-none d-sm-inline">BANNER LIST</span>
@@ -259,10 +260,5 @@
                     </script>  
 
 
-{{!-- 
-                    <script>
-                        $(document).ready(function () {
-                            var url = window.location.href;
-                            $('#menu a[href="' + url + '"]').closest('li').addClass('active');
-                        });
-                    </script> --}}
+
+                 

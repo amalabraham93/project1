@@ -147,6 +147,8 @@ admin_router.get('/sales-report/excel',adminauth.adminlogin,adminController.exce
 
 //Banner Management
 admin_router.get('/list-banner',adminController.listbanner)
+admin_router.get('/bannercategories',adminController.bannercategory)
+admin_router.get('/bannerproducts',adminController.bannerproduct)
 
 admin_router.get('/add-banner', adminauth.adminlogin,adminController.addbanner)
 admin_router.post('/added-banner', upload.single("productImage"),adminController.addedbanner)

@@ -6,7 +6,6 @@ const productCollection = require("../model/products_schema");
 const adminauth = require("../middleware/admin_auth");
 const Coupon = require('../model/coupon_schema')
 const app = require("../app");
-const category = require("../model/category_schema");
 const product = require("../model/products_schema");
  const PDFDocument = require('pdfkit');
  const { table } = require('pdfkit-table');
@@ -1146,7 +1145,27 @@ listbanner: async (req, res, next) => {
   }
 },
 
+bannercategory: async (req, res, next) => {
+  try {
+       const category1 = await Category.find({}).lean()
+       console.log(category1);
 
+         res.json(category1)   
+  } catch (error) {
+    next(error);
+  }
+},
+
+bannerproduct: async (req, res, next) => {
+  try {
+       const product = await productCollection.find({}).lean()
+       console.log(product);
+
+         res.json(product)   
+  } catch (error) {
+    next(error);
+  }
+},
 
 
 addbanner: async (req, res, next) => {
@@ -1161,10 +1180,10 @@ addbanner: async (req, res, next) => {
 
   addedbanner: async (req, res) => {
     console.log(req.body)
-    const { discription } = req.body;
+    const data = req.body;
     const image = req.file.filename;
     try {
-      await Banner.create({ image, discription });
+      await Banner.create({ data });
       res.redirect('/admin/add-banner');
     } catch (err) {
       console.error(err);

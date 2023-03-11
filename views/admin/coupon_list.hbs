@@ -81,10 +81,10 @@
                         <td>{{this.minimumPurchaseAmount}}</td>
                         <td>{{this.status}}</td>
                         <td><a href="/admin/edit_coupons/{{this._id}}"><button class="bi bi-pencil-square"></button></a>
-                        {{#ifEquals this.status 'active'}}
+                            {{#ifEquals this.status 'active'}}
                             <button onclick="alerted('{{this._id}}')">Activate</button>
-                        {{else}}
-                        <button onclick="alertedUndo('{{this._id}}')">Inactive</button>
+                            {{else}}
+                            <button onclick="alertedUndo('{{this._id}}')">Inactive</button>
                         </td>
                         {{/ifEquals}}
                         </td>
@@ -135,61 +135,63 @@
 </script>
 
 <script>
-  function alerted(proId) {
-    console.log(proId)
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, inactivate it!'
-    }).then((result) => {
-      $.ajax({
-        url: '/admin/coupon_inact/'+ proId,
-        method: 'get',
-        success: (response) => {
-          if (result.isConfirmed) {
-            Swal.fire({
-              icon: 'success',
-              title: 'Coupon is  inactivate  succesfuly',
-              showConfirmButton: false,
+    function alerted(proId) {
+        console.log(proId)
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, inactivate it!'
+        }).then((result) => {
+            $.ajax({
+                url: '/admin/coupon_inact/' + proId,
+                method: 'get',
+                success: (response) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Coupon is  inactivate  succesfuly',
+                            showConfirmButton: false,
+                        })
+                        setTimeout(() => {
+                            location.reload()
+                        }, 800)
+                    }
+                }
             })
-            setTimeout(() => {
-              location.reload()
-            }, 800)
-          }
-        }
-      })
-    })
-  }
-  function alertedUndo(proId) {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, Activate  it!'
-    }).then((result) => {
-      $.ajax({
-        url: '/admin/coupon_act/'+ proId,
-        method: 'get',
-        success: (response) => {
-          if (result.isConfirmed) {
-            Swal.fire({
-              icon: 'success',
-              title: 'Coupon is  Activated  succesfuly',
-              showConfirmButton: false,
+        })
+    }
+    function alertedUndo(proId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, Activate  it!'
+        }).then((result) => {
+            $.ajax({
+                url: '/admin/coupon_act/' + proId,
+                method: 'get',
+                success: (response) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Coupon is  Activated  succesfuly',
+                            showConfirmButton: false,
+                        })
+                        setTimeout(() => {
+                            location.reload()
+                        }, 800)
+                    }
+                }
             })
-            setTimeout(() => {
-              location.reload()
-            }, 800)
-          }
-        }
-      })
-    })
-  }
+        })
+    }
 </script>
+
+

@@ -49,16 +49,50 @@ button[type="submit"]:hover {
 <form action="/admin/added-banner" method="POST" enctype="multipart/form-data">
   <label for="image">Image:</label>
   <input type="file" name="image" id="image" required>
-  {{!-- <label for="link">Link:</label>
-  <input type="text" name="link" id="link" required> --}}
-   <label for="link">Discription:</label>
-  <input type="text" name="discription" id="discription" required>
-  {{!-- <label for="target">Target:</label>
-  <select name="target" id="target" required> --}}
-    {{!-- <option value="cart">Add to cart</option>
+    <label for="target">Target:</label>
+  <select name="target" id="target" required>
+      <option value="" selected disabled>Select a Target....</option>
+
+    <option value="cart">Add to cart</option>
     <option value="category">Category</option>
-  </select> --}}
+  </select>
+  <label for="link">Link:</label>
+  {{#if categorySelected}}
+    <select name="link" id="link" required>
+      {{#each categories}}
+        <option value="/categories/{{this._id}}">{{this.name}}</option>
+      {{/each}}
+    </select>
+  {{else}}
+    <select name="link" id="link" required>
+      {{#each products}}
+      <option value="" selected disabled>Select a product</option>
+      {{/each}}
+    </select>
+  {{/if}}
+  <label for="discription">Description:</label>
+  <input type="text" name="description" id="description" required>
   <button type="submit">Add Banner</button>
 </form>
-
 {{>admin_footer}}
+
+<script>
+  const targetSelect = document.querySelector('#target');
+  const linkSelect = document.querySelector('#link');
+  let categorySelected = targetSelect.value === 'category';
+
+  targetSelect.addEventListener('change', async (e) => {
+    console.log('jhasfafashfi')
+    categorySelected = e.target.value === 'category';
+    if (categorySelected) {
+      const response = await fetch('/admin/bannercategories');
+      console.log(response)
+      let categories = await response.json();
+      linkSelect.innerHTML = categories.map(category => `<option value="/categories/${category._id}">${category.categoryname}</option>`);
+    } else {
+      const response = await fetch('/admin/bannerproducts');
+      let products = await response.json();
+      linkSelect.innerHTML = products.map(product => `<option value="/products/${product._id}">${product.Name}</option>`);
+  }
+  });
+</script>
