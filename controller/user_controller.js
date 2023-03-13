@@ -9,10 +9,11 @@ const nodemailer = require("../controller/nodemailer");
 const Coupon = require("../model/coupon_schema");
 const Payment = require("../controller/payment_gateway");
 const Razorpay = require("razorpay");
+require('dotenv').config()
 
 var instance = new Razorpay({
-  key_id: "rzp_test_g5RMF7tYWVvJgS",
-  key_secret: "rygNBsuv7VhbANu61bV29OHa",
+  key_id: process.env.RAZORPAY_KEYID,
+  key_secret: process.env.RAZORPAY_KEYSECRET,
 });
 
 // const otpverification = require('../model/otpverification_schema')
@@ -725,7 +726,7 @@ module.exports = {
         // res.redirect("/product_list");
         res.json({success:true})
       } else {
-        res.redirect("/login");
+        // res.redirect("/login");
       }
     } catch (error) {
       next(error);

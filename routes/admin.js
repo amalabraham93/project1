@@ -151,7 +151,7 @@ admin_router.get('/bannercategories',adminController.bannercategory)
 admin_router.get('/bannerproducts',adminController.bannerproduct)
 
 admin_router.get('/add-banner', adminauth.adminlogin,adminController.addbanner)
-admin_router.post('/added-banner', upload.single("productImage"),adminController.addedbanner)
+admin_router.post('/added-banner',upload.single("productImage"),adminController.addedbanner)
 admin_router.get('/edit_banner/:id', adminauth.adminlogin,adminController.editbanner)
 admin_router.post('/edited_banner/:id', adminauth.adminlogin,adminController.editedbanner)
 

@@ -1,45 +1,45 @@
 <style>
-    form {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  margin-top: 20px;
-}
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin-top: 20px;
+  }
 
-label {
-  margin-top: 10px;
-  font-weight: bold;
-}
+  label {
+    margin-top: 10px;
+    font-weight: bold;
+  }
 
-input[type="file"] {
-  margin-bottom: 20px;
-}
+  input[type="file"] {
+    margin-bottom: 20px;
+  }
 
-input[type="text"],
-select {
-  margin-bottom: 10px;
-  padding: 5px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
+  input[type="text"],
+  select {
+    margin-bottom: 10px;
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
 
-select {
-  width: 100%;
-}
+  select {
+    width: 100%;
+  }
 
-button[type="submit"] {
-  background-color: #008CBA;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  cursor: pointer;
-}
+  button[type="submit"] {
+    background-color: #008CBA;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
 
-button[type="submit"]:hover {
-  background-color: #005b8e;
-}
+  button[type="submit"]:hover {
+    background-color: #005b8e;
+  }
 </style>
 
 
@@ -49,26 +49,26 @@ button[type="submit"]:hover {
 <form action="/admin/added-banner" method="POST" enctype="multipart/form-data">
   <label for="image">Image:</label>
   <input type="file" name="image" id="image" required>
-    <label for="target">Target:</label>
+  <label for="target">Target:</label>
   <select name="target" id="target" required>
-      <option value="" selected disabled>Select a Target....</option>
+    <option value="" selected disabled>Select a Target....</option>
 
     <option value="cart">Add to cart</option>
     <option value="category">Category</option>
   </select>
   <label for="link">Link:</label>
   {{#if categorySelected}}
-    <select name="link" id="link" required>
-      {{#each categories}}
-        <option value="/categories/{{this._id}}">{{this.name}}</option>
-      {{/each}}
-    </select>
+  <select  name="link" id="link" required>
+    {{#each categories}}
+    <option value="/categories/{{this._id}}">{{this.name}}</option>
+    {{/each}}
+  </select>
   {{else}}
-    <select name="link" id="link" required>
-      {{#each products}}
-      <option value="" selected disabled>Select a product</option>
-      {{/each}}
-    </select>
+  <select  name="link" id="link" required>
+    {{#each products}}
+    <option value="/products/{{product._id}}">{{product.Name}}</option>
+    {{/each}}
+  </select>
   {{/if}}
   <label for="discription">Description:</label>
   <input type="text" name="description" id="description" required>
@@ -93,6 +93,6 @@ button[type="submit"]:hover {
       const response = await fetch('/admin/bannerproducts');
       let products = await response.json();
       linkSelect.innerHTML = products.map(product => `<option value="/products/${product._id}">${product.Name}</option>`);
-  }
+    }
   });
 </script>
