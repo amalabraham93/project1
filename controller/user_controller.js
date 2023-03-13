@@ -1185,6 +1185,32 @@ module.exports = {
   },
 
 
+  paymentfailed: async (req, res, next) => {
+    try {
+      if (req.session.userid) {
+        const orderdata = await User.findOne({ email: req.session.userid });
+
+        const latestorder = orderdata.order.sort(
+          (a, b) => b.order_date - a.order_date
+        )[0];
+        const updatedOrder = await User.updateOne(
+          {
+            email: req.session.userid,
+            "order.order_id": latestorder.order_id,
+          },
+          { $set: { "order.$.status": "Payment Failed" } }
+        );
+        res.json({success:true})
+     
+        // res.render("users/order_details", { layout: "layout", orderdata });
+      }
+    } catch (error) {
+      next(error);
+    }
+  },
+
+
+
 
 
   orderdetails: async (req, res, next) => {

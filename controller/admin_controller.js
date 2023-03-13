@@ -504,7 +504,7 @@ module.exports = {
       //     res.redirect('/admin')
       // }
     } catch (error) {
-      next(err);
+      next(error);
     }
   },
 
@@ -578,7 +578,7 @@ module.exports = {
       //     res.redirect('/admin')
       // }
     } catch (error) {
-      next(err);
+      next(error);
     }
   },
 
@@ -1257,15 +1257,15 @@ module.exports = {
   addedbanner: async (req, res) => {
     try {
       console.log(req.body)
-    //  const data = req.body;
-    //   const image1 = req.file.filename;
-    //   const banner1 = new Banner({
-    //     image: image1,
-    //     link: data.link,
-    //     target: data.target,
-    //     discription: data.discription,
-    //   });
-    //   banner1.save();
+     const data = req.body;
+      const image1 = req.file.filename;
+      const banner1 = new Banner({
+        image: image1,
+        link: data.link,
+        target: data.target,
+        discription: data.discription,
+      });
+      banner1.save();
       res.redirect("/admin/add-banner");
     } catch (err) {
       console.error(err);

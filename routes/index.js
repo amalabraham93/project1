@@ -106,6 +106,8 @@ router.post('/proceedtopay',userauth.userlogin,userController.orderplaced)
 
 router.post('/verify-payment',userauth.userlogin,userController.verifypay)
 
+router.get('/paymentfailed',userauth.userlogin,userController.paymentfailed)
+
 
 router.get('/order_confirmation',userauth.userlogin,userController.orderconfirmation)
 

@@ -236,6 +236,7 @@
 
 
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 <script>
@@ -379,8 +380,41 @@
             },
             "theme": {
                 "color": "#3399cc"
-            }
+            },
+            "modal":{
+                        escape:false,
+                        onDismiss:()=>{
+                            $.ajax({
+                                url:'/paymentfailed',
+                                method: 'get',
+                                 success: (res) => {
+                                     Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Payment failed.',
+                            })
+
+                                 }
+                            })
+                           
+                          
+                        }
+                    }
         };
+        var rzp1 = new Razorpay(options);
+        rzp1.on('payment.failed', function (response){
+       // alert(response.error.code);
+       // alert(response.error.description);
+       // alert(response.error.source);
+       // alert(response.error.step);
+       // alert(response.error.reason);
+       // alert(response.error.metadata.order_id);
+       // alert(response.error.metadata.payment_id);
+       paymentfailed(response, order)
+       rzp1.close();
+});
+
+
         var rzp1 = new Razorpay(options);
         rzp1.open();
     }
@@ -407,7 +441,35 @@
         })
     }
 
+      function paymentfailed(data, order){
+          $.ajax({
+                      url:'/paymentfailed',
+                       method: 'get',
+                        data:{
+                         data,
+                        order
+                             },
+                        success: (res) => {
+                      if(response.paymentFailed){
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'warning',
+                            title: 'payment failed',
+                            text: data.error.description,
+                            showConfirmButton: false,
+                            timer: 3500,
+                        })
+                        setTimeout(() => {
+                            location.reload()
+                        }, 3000);
+                    }
+                }
+                
+            })
 
+            
+        
+      }
 
 </script>
 

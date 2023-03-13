@@ -48,7 +48,7 @@
 <h3>Add Banner </h3>
 <form action="/admin/added-banner" method="POST" enctype="multipart/form-data">
   <label for="image">Image:</label>
-  <input type="file" name="image" id="image" required>
+  <input type="file" name="productImage" id="image" required>
   <label for="target">Target:</label>
   <select name="target" id="target" required>
     <option value="" selected disabled>Select a Target....</option>
@@ -71,7 +71,7 @@
   </select>
   {{/if}}
   <label for="discription">Description:</label>
-  <input type="text" name="description" id="description" required>
+  <input type="text" name="discription" id="discription" required>
   <button type="submit">Add Banner</button>
 </form>
 {{>admin_footer}}
