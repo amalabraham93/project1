@@ -9,7 +9,9 @@ const nodemailer = require("../controller/nodemailer");
 const Coupon = require("../model/coupon_schema");
 const Payment = require("../controller/payment_gateway");
 const Razorpay = require("razorpay");
-require('dotenv').config()
+require('dotenv').config();
+const Banner = require("../model/banner_schema");
+
 
 var instance = new Razorpay({
   key_id: process.env.RAZORPAY_KEYID,
@@ -517,17 +519,19 @@ module.exports = {
         .find({ archive: false })
         .limit(8)
         .lean();
+        const banner1 = await Banner.find({}).lean()
       if (req.session.userid) {
+        console.log(banner1)
         const user = await User.findOne({ email: req.session.userid }).populate('cart.productid');
         const cartItems = user.cart;
         const totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
         res.render("users/userhome", {
           layout: "layout",totalQuantity,
           user: req.session.userid,
-          products,
+          products,banner1
         });
       } else {
-        res.render("users/userhome", { layout: "layout", products });
+        res.render("users/userhome", { layout: "layout", products,banner1 });
       }
       // let user = session.userid
     } catch (error) {
