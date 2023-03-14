@@ -101,7 +101,8 @@
                     <tbody>
                         {{#each cart1.cart }}
                         <tr>
-                            
+                             <input type="hidden" name="" class="{{this.productid._id}}" value="{{this.productid.Quantity}}">
+
                             <td name="name{{@index}}">
                                 <div class="media">
                                     <div class="d-flex">
@@ -120,7 +121,7 @@
                             <td name="quantity">
                                 <div class="product_count">
 
-
+                                       
                                     <input type="text" name="qty" id="{{this.productid._id}}" maxlength="12"
                                         value="{{this.quantity}}" title="Quantity:" class="input-text qty" readonly>
                                     {{!-- <a id="inc" href="/incqty/{{this.productid._id}}"> --}}
@@ -269,6 +270,7 @@
 
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 <script>
@@ -276,8 +278,17 @@
     function incqty(id) {
         let currentQty = parseInt($('#'+id).val());
         let newQty = currentQty + 1;
+        let quantity1 = parseInt($('.'+id).val());
+        console.log(quantity1)
+        if(quantity1 == currentQty ){
+            Swal.fire({
+                icon: 'error',
+                title: 'oops',
+                text : 'Product at its maximum quantity '
+            })
 
-        $.ajax({
+        }else {  
+            $.ajax({
             url: '/incqty/' + id,
             type: 'GET',
             success: function (response) {
@@ -294,7 +305,7 @@
                 $('#billtotal').text('$'+alltotal);
                 $('#totalbill').text('$'+alltotal);
             }
-        });
+        });}
     }
 
     function decqty(id) {
