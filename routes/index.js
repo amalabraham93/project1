@@ -11,6 +11,7 @@ const adminRouter = require('./admin');
 /* GET home page. */
 router.get('/',userController.loaduser);
 
+router.get('/products',userController.productsearch);
 
 // router.get('/:id', function(req, res, next) {
 

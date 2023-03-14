@@ -548,6 +548,18 @@ module.exports = {
     }
   },
 
+
+  productsearch: async (req, res, next) => {
+    const searchTerm = req.query.searchTerm;
+  const regex = new RegExp(searchTerm, 'i');
+    try {
+      const products = await productCollection.find({ Name: regex }).limit(4)
+      res.json(products);
+    } catch (error) {
+      next(error);
+    }
+  },
+
   // wishlist
   addwishlist: async (req, res, next) => {
     try {
