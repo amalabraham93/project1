@@ -1,3 +1,37 @@
+<style>
+	.out-of-stock {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #ff5722;
+  color: white;
+  padding: 5px 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.prd-bottom a[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.prd-bottom a[disabled] .hover-text {
+  display: none;
+}
+
+.prd-bottom a[disabled] .ti-bag:before {
+  content: "\e6bb"; /* Use a different icon for the disabled button */
+  color: #ccc;
+}
+
+.prd-bottom a[disabled] .ti-bag:after {
+  content: "Out of Stock";
+  color: #ccc;
+  font-size: 14px;
+  font-weight: bold;
+  margin-left: 5px;
+}
+</style>
 {{>user_headnav}}
 <!-- End Header Area -->
 
@@ -7,7 +41,7 @@
 <section class="banner-area">
 	<div class="container">
 		<div class="row fullscreen align-items-center justify-content-start">
-			<div class="col-lg-12">
+			<div class="col-lg-12" style="padding: 16%;">
 				<div class="active-banner-slider owl-carousel">
 					{{#each banner1}}
 					<!-- single-slide -->
@@ -190,40 +224,54 @@
 				{{#each products}}
 				<div class="col-lg-3 col-md-6">
 					<div class="single-product">
+						{{!-- Product image --}}
 						<img class="img-fluid" src="/productImages/{{this.image.[0]}}" alt=""
 							style="width: 255px; height: 277px;">
-						<div class="product-details">
-							<h6>{{this.Name}}</h6>
-							<div class="price">
-								<h6>{{this.Price}}</h6>
-								{{!-- <h6 class="l-through">$210.00</h6> --}}
-							</div>
-							<div class="prd-bottom">
 
-								<a onclick="addtocart('{{this._id}}')" class="social-info">
-									<span class="ti-bag"></span>
-									<p class="hover-text">add to bag</p>
-								</a>
-								<a  onclick="addtowish('{{this._id}}')" class="social-info">
-									<span class="lnr lnr-heart"></span>
-									<p class="hover-text">Wishlist</p>
-								</a>
-								{{!-- <a href="" class="social-info">
-									<span class="lnr lnr-sync"></span>
-									<p class="hover-text">compare</p>
-								</a> --}}
-								<a href="/product_details/{{this._id}}" class="social-info">
-									<span class="lnr lnr-move"></span>
-									<p class="hover-text">view more</p>
-								</a>
-							</div>
+						{{!-- Out of Stock tag --}}
+						{{#ifCond this.Quantity '<=' 0}} <div class="out-of-stock">Out of Stock
+					</div>
+					{{/ifCond}}
+
+					<div class="product-details">
+						<h6>{{this.Name}}</h6>
+						<div class="price">
+							<h6>{{this.Price}}</h6>
+							{{!-- <h6 class="l-through">$210.00</h6> --}}
+						</div>
+
+						{{!-- Add to Cart button --}}
+						<div class="prd-bottom">
+							{{#ifCond this.Quantity '>' 0}}
+							<a onclick="addtocart('{{this._id}}')" class="social-info">
+								<span class="ti-bag"></span>
+								<p class="hover-text">Add to Cart</p>
+							</a>
+							{{else}}
+							<a class="social-info" disabled>
+								<span class="ti-bag"></span>
+								<p class="hover-text">Out of Stock</p>
+							</a>
+							{{/ifCond}}
+
+							{{!-- Other buttons --}}
+							<a onclick="addtowish('{{this._id}}')" class="social-info">
+								<span class="lnr lnr-heart"></span>
+								<p class="hover-text">Wishlist</p>
+							</a>
+
+							<a href="/product_details/{{this._id}}" class="social-info">
+								<span class="lnr lnr-move"></span>
+								<p class="hover-text">View More</p>
+							</a>
 						</div>
 					</div>
 				</div>
-				{{/each}}
-
 			</div>
+			{{/each}}
+
 		</div>
+	</div>
 	</div>
 	<!-- single product slide -->
 	<div class="single-product-slider">
@@ -764,15 +812,15 @@
 						showConfirmButton: false,
 						timer: 1500
 					})
-				} else if(response.already){
+				} else if (response.already) {
 					Swal.fire({
 						icon: 'error',
 						title: response.message,
 						showConfirmButton: false,
 						timer: 2000
 					})
-				}else {
-					location.href ='/login'
+				} else {
+					location.href = '/login'
 				}
 			}
 		});
@@ -796,15 +844,15 @@
 						showConfirmButton: false,
 						timer: 1500
 					})
-				} else if(response.already){
+				} else if (response.already) {
 					Swal.fire({
 						icon: 'error',
 						title: response.message,
 						showConfirmButton: false,
-						timer: 2000	
+						timer: 2000
 					})
-				}else{
-					location.href ='/login'
+				} else {
+					location.href = '/login'
 				}
 			}
 		});

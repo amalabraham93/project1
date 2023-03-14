@@ -1141,7 +1141,9 @@ h1, h2, h3, h4, h5, h6 {
         margin-left: 35px; }
         @media (max-width: 991px) {
           .header_area .navbar .nav.navbar-nav.navbar-right li:first-child {
-            display: none; } }
+/* display: none;  */
+       margin: 0;
+          } }
       .header_area .navbar .nav.navbar-nav.navbar-right li span {
         color: #222222;
         line-height: 80px;
