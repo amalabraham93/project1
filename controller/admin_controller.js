@@ -590,7 +590,8 @@ module.exports = {
       const proid = req.body.data1;
       const imgid = req.params.id;
       console.log("hkzhzjhcvkzhcvjkhzxkvjhzjhvkzjhvjzhvkjz" + proid, imgid);
-      const imgurl = "./public/productImages/" + imgid;
+      const imgurl = "public/productImages/" + imgid;
+      console.log(imgurl)
       // let categorys = await category.find({ delete: false }).lean();
       fs.unlink(imgurl);
 
