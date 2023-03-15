@@ -23,6 +23,28 @@ form > * {
 h5 {
     margin-top: 20px;
 }
+
+
+/* Style for invalid feedback */
+.form-control:invalid,
+.form-control.is-invalid {
+    border-color: #dc3545;
+}
+
+.invalid-feedback {
+    display: none;
+    color: #dc3545;
+    margin-top: .25rem;
+    font-size: 80%;
+}
+
+.form-control:invalid ~ .invalid-feedback,
+.form-control.is-invalid ~ .invalid-feedback {
+    display: block;
+}
+
+
+
 </style>
 <!-- End Header Area -->
 
@@ -100,4 +122,74 @@ h5 {
 
 <script>
     console.log("jjojpoo")
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<script>
+    // Get form element and set up event listener for form submission
+    const form = document.querySelector('.needs-validation');
+    form.addEventListener('submit', function(event) {
+        // Check if form is valid
+        if (!form.checkValidity()) {
+            event.preventDefault(); // Prevent form submission if invalid
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated'); // Add "was-validated" class to show validation feedback
+    });
+
+    // Get form inputs
+    const streetInput = document.getElementById('street');
+    const countryInput = document.getElementById('country');
+    const stateInput = document.getElementById('state');
+    const districtInput = document.getElementById('district');
+    const pincodeInput = document.getElementById('pincode');
+
+    // Set up event listeners for inputs
+    streetInput.addEventListener('input', validateStreet);
+    countryInput.addEventListener('input', validateCountry);
+    stateInput.addEventListener('input', validateState);
+    districtInput.addEventListener('input', validateDistrict);
+    pincodeInput.addEventListener('input', validatePincode);
+
+    // Validation functions
+    function validateStreet() {
+        if (streetInput.value.trim() === '') {
+            streetInput.setCustomValidity('Please enter your street address.');
+        } else {
+            streetInput.setCustomValidity('');
+        }
+    }
+
+    function validateCountry() {
+        if (countryInput.value.trim() === '') {
+            countryInput.setCustomValidity('Please enter your country.');
+        } else {
+            countryInput.setCustomValidity('');
+        }
+    }
+
+    function validateState() {
+        if (stateInput.value.trim() === '') {
+            stateInput.setCustomValidity('Please enter your state.');
+        } else {
+            stateInput.setCustomValidity('');
+        }
+    }
+
+    function validateDistrict() {
+        if (districtInput.value.trim() === '') {
+            districtInput.setCustomValidity('Please enter your district.');
+        } else {
+            districtInput.setCustomValidity('');
+        }
+    }
+
+    function validatePincode() {
+        if (!/^[0-9]{6}$/.test(pincodeInput.value.trim())) {
+            pincodeInput.setCustomValidity('Please enter a valid pincode.');
+        } else {
+            pincodeInput.setCustomValidity('');
+        }
+    }
 </script>

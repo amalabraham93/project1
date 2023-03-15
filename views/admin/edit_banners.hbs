@@ -1,3 +1,49 @@
+<style>
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin-top: 20px;
+  }
+
+  label {
+    margin-top: 10px;
+    font-weight: bold;
+  }
+
+  input[type="file"] {
+    margin-bottom: 20px;
+  }
+
+  input[type="text"],
+  select {
+    margin-bottom: 10px;
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  select {
+    width: 100%;
+  }
+
+  button[type="submit"] {
+    background-color: #008CBA;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+
+  button[type="submit"]:hover {
+    background-color: #005b8e;
+  }
+</style>
+
+
+
 {{>admin_nav}}
 
 <h1>Edit Banner</h1>
@@ -5,26 +51,58 @@
 <form method="POST" action="/admin/edited_banner/{{banner._id}}">
   <div>
     <label for="image">Image URL:</label>
-    <input type="text" id="image" name="image" value="/productImages/{{banner.image}}">
+    <img src="/productImages/{{banner.image}}" alt="" style="width: 10%;">
+    <input type="file" id="image" name="productImage" value="">
   </div>
   <div>
-    {{!-- <label for="link">Link URL:</label>
-    <input type="text" id="link" name="link" value="{{banner.link}}">
-  </div> --}}
-  <div>
-    {{!-- <label for="target">Target:</label>
-    <select id="target" name="target">
-      <option value="cart" {{#if (eq banner.target "cart")}}selected{{/if}}>Cart</option>
-      <option value="category" {{#if (eq banner.target "category")}}selected{{/if}}>Category</option>
-    </select> --}}
-  </div>
-  <div>
-    <label for="description">Description:</label>
-    <textarea id="description" name="description">{{banner.description}}</textarea>
-  </div>
-  <button type="submit">Save</button>
+     <label for="target">Target:</label>
+  <select name="target" id="target" required>
+    <option value="" selected disabled>Select a Target....</option>
+
+    <option value="cart">Add to cart</option>
+    <option value="category">Category</option>
+  </select>
+  <label for="link">Link:</label>
+  {{#if categorySelected}}
+  <select  name="link" id="link" required>
+    {{#each categories}}
+    <option value="/categories/{{this._id}}">{{this.name}}</option>
+    {{/each}}
+  </select>
+  {{else}}
+  <select  name="link" id="link" required>
+    {{#each products}}
+    <option value="/products/{{product._id}}">{{product.Name}}</option>
+    {{/each}}
+  </select>
+  {{/if}}
+  <label for="discription">Description:</label>
+  <input type="text" name="discription" id="discription" value="{{banner.discription}}" required>
+  <button type="submit">Add Banner</button>
 </form>
 
 
-
 {{>admin_footer}}
+
+
+
+<script>
+  const targetSelect = document.querySelector('#target');
+  const linkSelect = document.querySelector('#link');
+  let categorySelected = targetSelect.value === 'category';
+
+  targetSelect.addEventListener('change', async (e) => {
+    console.log('jhasfafashfi')
+    categorySelected = e.target.value === 'category';
+    if (categorySelected) {
+      const response = await fetch('/admin/bannercategories');
+      console.log(response)
+      let categories = await response.json();
+      linkSelect.innerHTML = categories.map(category => `<option value="/categories/${category._id}">${category.categoryname}</option>`);
+    } else {
+      const response = await fetch('/admin/bannerproducts');
+      let products = await response.json();
+      linkSelect.innerHTML = products.map(product => `<option value="/products/${product._id}">${product.Name}</option>`);
+    }
+  });
+</script>

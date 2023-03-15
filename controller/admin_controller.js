@@ -13,6 +13,7 @@ const fs = require("fs");
 const Excel = require("exceljs");
 const moment = require("moment");
 const Banner = require("../model/banner_schema");
+const category = require("../model/category_schema");
 // const pdfMake = require("pdfmake");
 let session;
 
@@ -561,7 +562,7 @@ module.exports = {
   productEdit: async (req, res, next) => {
     try {
       // if (req.session.adminLoggedIn) {
-
+      console.log('hiii');
       let categorys = await category.find({ delete: false }).lean();
       let products = await product
         .findOne({ _id: req.params.id })
@@ -1213,6 +1214,7 @@ module.exports = {
   listbanner: async (req, res, next) => {
     try {
       const banner = await Banner.find({}).lean();
+      console.log(banner)
       res.render("admin/list_banner", {
         layout: "admin_layout",
         banner,
@@ -1274,10 +1276,12 @@ module.exports = {
   },
 
   editbanner: async (req, res) => {
-    const id = req.params;
+    const id = req.params.id;
+    console.log(id)
     try {
-      const banner = await Banner.findOne({ _id: id });
-      res.render("admin/edit_banner", {
+      const banner = await Banner.findOne({ _id: id }).lean();
+      console.log(banner)
+      res.render("admin/edit_banners", {
         layout: "admin_layout",
         banner,
         admin: req.session.adminid,
@@ -1294,8 +1298,8 @@ module.exports = {
         req.params.id,
         {
           image: req.body.image,
-          // link: req.body.link,
-          // target: req.body.target,
+          link: req.body.link,
+          target: req.body.target,
           description: req.body.description,
         },
         { new: true }

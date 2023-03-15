@@ -44,7 +44,7 @@ module.exports = {
     let userdb = await User.findOne({ email: data1.email });
     if (userdb) {
       if (userdb.email == data1.email) {
-        res.render("users/register", { layout: "layout" });
+        res.render("users/register", { layout: "layout" , error:'email already in our data base'});
       }
     } else {
       data1.password = await bycrpt.hash(data1.password, 10);

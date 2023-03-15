@@ -1,3 +1,11 @@
+<style>
+	.is-invalid {
+  border: 1px solid red;
+  color: red;
+}
+</style>
+
+
 {{>user_headnav}}
 	<!-- End Header Area -->
 
@@ -8,7 +16,7 @@
 				<div class="col-first">
 					<h1>Login/Register</h1>
 					<nav class="d-flex align-items-center">
-						<a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+						<a href="/">Home<span class="lnr lnr-arrow-right"></span></a>
 						<a href="category.html">Login/Register</a>
 					</nav>
 				</div>
@@ -40,31 +48,16 @@
 							</div>
                             
                             <div class="col-md-12 form-group">
-								<input type="email" class="form-control" id="name" name="email" placeholder="Email"  onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email'" required >
+								<input type="email" class="form-control" id="email" name="email" placeholder="Email"  onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email'" required >
 							</div>
                              
                              <div class="col-md-12 form-group">
-								<input type="text" class="form-control" id="name" name="phone" placeholder="Phone Number"  onfocus="this.placeholder = ''" onblur="this.placeholder = 'Phone Number'" required>
+								<input type="text" class="form-control" id="phone" name="phone" placeholder="Phone Number"  onfocus="this.placeholder = ''" onblur="this.placeholder = 'Phone Number'" required>
 							</div>
                             
-                            {{!-- <div class="col-md-12 form-group">
-								<input type="text" class="form-control" id="name" name="saddress" placeholder="Street Address"  onfocus="this.placeholder = ''" onblur="this.placeholder = 'Street Address'" >
-							</div>
-
-                            <div class="col-md-12 form-group">
-								<input type="text" class="form-control" id="name" name="country" placeholder="Country"  onfocus="this.placeholder = ''" onblur="this.placeholder = 'Country'" >
-							</div>
-                             
-                             <div class="col-md-12 form-group">
-								<input type="text" class="form-control" id="name" name="state" placeholder="State"  onfocus="this.placeholder = ''" onblur="this.placeholder = 'State'" >
-							</div>
-
-                            <div class="col-md-12 form-group">
-								<input type="text" class="form-control" id="name" name="pincode" placeholder="Pincode"  onfocus="this.placeholder = ''" onblur="this.placeholder = 'Pincode'" >
-							</div> --}}
-
+                           
 							<div class="col-md-12 form-group">
-								<input type="Password" class="form-control" id="name" name="password" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'" required>
+								<input type="Password" class="form-control" id="password" name="password" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'" required>
 							</div>
 							<div class="col-md-12 form-group">
 								<div class="creat_account">
@@ -76,6 +69,9 @@
 								<button type="submit" value="submit" class="primary-btn">Submit</button>
 								<a href="#"></a>
 							</div>
+								{{#if error}}
+							<div class="alert alert-danger text-center mb-3">{{error}}</div>
+                                {{/if}}
 						</form>
 					</div>
 				</div>
@@ -85,3 +81,67 @@
 	<!--================End Login Box Area =================-->
 
 	{{>user_footer}}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+	<script>
+	// Get the form element
+ // Get form element
+  const form = document.querySelector('.login_form');
+
+  // Get input elements
+  const nameInput = document.getElementById('name');
+  const emailInput = document.getElementById('email');
+  const phoneInput = document.getElementById('phone');
+  const passwordInput = document.getElementById('password');
+
+  // Add event listener to form submit event
+  form.addEventListener('submit', function(event) {
+    // Prevent form submission
+    event.preventDefault();
+
+    // Validate inputs
+    let isValid = true;
+
+    // Validate name input
+    if (nameInput.value.trim() === '') {
+      nameInput.classList.add('is-invalid');
+      isValid = false;
+    } else {
+      nameInput.classList.remove('is-invalid');
+    }
+
+    // Validate email input
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailInput.value.trim())) {
+      emailInput.classList.add('is-invalid');
+      isValid = false;
+    } else {
+      emailInput.classList.remove('is-invalid');
+    }
+
+    // Validate phone input
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(phoneInput.value.trim())) {
+      phoneInput.classList.add('is-invalid');
+      isValid = false;
+    } else {
+      phoneInput.classList.remove('is-invalid');
+    }
+
+    // Validate password input
+    if (passwordInput.value.trim() === '') {
+      passwordInput.classList.add('is-invalid');
+      isValid = false;
+    } else {
+      passwordInput.classList.remove('is-invalid');
+    }
+
+    // Submit form if all inputs are valid
+    if (isValid) {
+      form.submit();
+    }
+  });
+
+
+
+	</script>
