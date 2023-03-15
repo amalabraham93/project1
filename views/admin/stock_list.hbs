@@ -29,7 +29,12 @@
             <td>{{this.categoryid.categoryname}}</td>
             <td>{{this.Quantity}}</td>
             <td>{{this.Price}}</td>
-            <td></td>
+            {{#ifCond this.Quantity '<=' 0 }}
+            <td>Out Of Stock</td>
+            {{else}}
+            <td>In Stock</td>
+            {{/ifCond}}
+
             <td><a href="/admin/edit_products/{{this._id}} " class="btn btn-primary">View</a></td>
             {{!-- {{#if this.archive}}
             <td> <button class="btn btn-danger" onclick="alertedUndo('{{this._id}}');">Unhide</button>

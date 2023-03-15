@@ -1,3 +1,8 @@
+<link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+  
+<script src="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css"></script>
+
+
 {{>admin_nav}}
 
 
@@ -11,7 +16,7 @@
       </p>
       <a href="/admin/add_product" class="btn btn-outline-success btn-lg">Add new Product</a>
       <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
-      <table class=" sortable table table-striped mt-5" id="myTable">
+      <table class=" display sortable table table-striped mt-5" id="myTable">
         <thead>
           <tr>
             <th> Image </th>
@@ -59,10 +64,26 @@
 {{>admin_footer}}
 
 
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
 <script>
+  $(document).ready(function() {
+    $('#myInput').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'print'
+        ]
+    } );
+} )
+</script>
+
+
+
+
+
+
+{{!-- <script>
     function searchTable() {
         var input, filter, found, table, tr, td, i, j;
         input = document.getElementById ("myInput");
@@ -85,7 +106,7 @@
         }
     }
 
-</script>
+</script> --}}
 
 
 
